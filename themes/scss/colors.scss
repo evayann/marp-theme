@@ -1,0 +1,69 @@
+$black: black;
+$white: white;
+$red: red;
+$orange: orange;
+$yellow: yellow;
+
+@mixin color-scheme($bg, $text, $mark, $code, $codebg) {
+    color: $text;
+    background-color: $bg;
+
+    a,
+    mark {
+        color: $mark;
+    }
+
+    // code {
+    //     background: rgba($codebg, 80%);
+    //     color: $code;
+    // }
+
+    h1, h2, h3, h4, h5, h6 {
+        strong {
+            color: $mark;
+        }
+
+        img {
+            display: block;
+            margin: auto;
+        }
+    }
+
+    // pre > code {
+    //     background: $codebg;
+    //     color: $code
+    // }
+
+    header,
+    footer,
+    section::after,
+    blockquote::before,
+    blockquote::after {
+        color: mix($text, $bg, 80%);
+    }
+
+    table {
+        th, td {
+        border-color: $text;
+        }
+
+        thead th {
+        background: $text;
+        color: $bg;
+        }
+
+        tbody > tr:nth-child(odd) {
+            td, th {
+                background: rgba($text, 0.1);
+            }
+        }
+    }
+}
+
+section {
+    @include color-scheme($black, $white, $red, $orange, $yellow);
+
+    &.invert {
+        @include color-scheme($white, $black, $red, $orange, $yellow);
+    }
+}

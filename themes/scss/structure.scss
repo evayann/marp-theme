@@ -1,0 +1,6 @@
+$max-page: 300;
+
+@for $i from 0 to $max-page {
+    [data-marpit-pagination="#{$i}"] { --page: #{$i}; }
+    [data-marpit-pagination-total="#{$i}"] { --nb-page: #{$i}; }
+}

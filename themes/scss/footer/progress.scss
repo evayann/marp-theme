@@ -1,0 +1,13 @@
+@use "../structure.scss";
+
+section {
+    left: 0%;
+    border: 1px red;
+
+    &::after {
+        content: "";
+        width: calc(var(--page) / var(--nb-page));
+        text-align: center;
+        border-radius: 50%;
+    }
+}
