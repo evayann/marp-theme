@@ -2,12 +2,6 @@
   "name": "marp-style",
   "version": "1.0.0",
   "description": "A custom theme style for marp presentation",
-  "scripts": {
-    "sass": "sass --watch --no-source-map themes/scss:themes/styles"
-  },
-  "dependencies": {
-    "sass": "1.56.0"
-  },
   "author": "Yann Zavattero",
   "license": "ISC"
 }
