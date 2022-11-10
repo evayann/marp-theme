@@ -1,3 +1,5 @@
+_static
 .vscode
 themes/styles
 node_modules
+package-lock.json

@@ -67,3 +67,7 @@ section {
         @include color-scheme($white, $black, $red, $orange, $yellow);
     }
 }
+
+h1 {
+    color: red;
+}
