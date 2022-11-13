@@ -1,0 +1,8 @@
+@import "../utilities/utilities";
+@import "./colors";
+
+.reveal .slides section.title {
+    @include section(4vmax);
+    @include center;
+    background: $primary;
+}

@@ -1,0 +1,13 @@
+$primary: #A7ACD9;
+
+@import "../core/layout/layout";
+
+@import "../core/utilities/code";
+
+@import "../core/pagination/number";
+@import "../core/utilities/font-size";
+
+.reveal {
+    // background-image: url(../assets/pastel/pattern.svg);
+    background: linear-gradient(-45deg, #A88BEB, #F8CEEC);
+}

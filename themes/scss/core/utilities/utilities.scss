@@ -1,0 +1,38 @@
+@mixin section($margin: 0) {
+    margin: $margin;
+	top: 0 !important;
+
+	@if ($margin == 0) {
+		height: 100vh;
+		width: 100vw;
+	}
+	@else {
+		height: calc(100vh - #{2 * $margin});
+		width: calc(100vw - #{2* $margin});
+	}
+}
+
+@mixin center {
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin img($class) {
+	p:has(img) {
+		margin: 0 !important;
+	}
+	
+	p:has(img) > #{$class} {
+		@content;
+	}
+}
+
+.rows {
+	display: flex;
+	
+	& > * {
+		flex-basis: 100%;
+	}
+}

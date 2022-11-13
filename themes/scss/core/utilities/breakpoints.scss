@@ -1,0 +1,44 @@
+//#region Breakpoints
+$xs: "0px";
+$sm: "576px";
+$md: "768px";
+$lg: "992px";
+$xl: "1200px";
+$xxl: "1400px";
+
+@mixin breakpoint($breakpoint: $xs) {
+    @media screen and (min-width: $breakpoint) {
+        @content;
+    }
+}
+
+@mixin xxl {
+    @media screen and (min-width: $xxl) {
+        @content;
+    }
+}
+
+@mixin xl {
+    @media screen and (min-width: $xl) {
+        @content;
+    }
+}
+
+@mixin lg {
+    @media screen and (min-width: $lg) {
+        @content;
+    }
+}
+
+@mixin md {
+    @media screen and (min-width: $md) {
+        @content;
+    }
+}
+
+@mixin sm {
+    @media screen and (min-width: $sm) {
+        @content;
+    }
+}
+//#endregion Breakpoints

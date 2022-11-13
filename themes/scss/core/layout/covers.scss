@@ -1,0 +1,77 @@
+@import "../utilities/utilities";
+@import "../utilities/breakpoints";
+
+@mixin grid {
+    display: grid !important;
+    height: 100%;
+    width: 100%;
+}
+
+@mixin align-left {
+    justify-self: left;
+    align-self: center;
+}
+
+.reveal .slides section.cover {
+    @include section(4vmax);
+
+    @include md {
+	    width: calc(100vw - 4vmin - 22vw);
+	    margin-left: 22vw;
+    }
+
+    display: grid !important;
+
+    font-size: 13px;
+    background: $primary;
+    
+    grid-template-areas:
+        "logo logo"
+        "titles titles"
+        ". credit";
+    grid-template-columns: auto 40%;
+    grid-template-rows: 6vmin 1fr auto;
+    
+    box-sizing: border-box;
+    padding: 10vmin;
+
+    // p:has(img), .logo {
+    //     grid-area: logo;
+    //     width: 25vmin;
+    //     margin: 0 !important;
+    //     @include align-left;
+    // }
+
+    @include img(".logo") {
+        grid-area: logo;
+        width: 25vmin;
+        margin: 0 !important;
+        @include align-left;
+    }
+
+    .titles {
+        grid-area: titles;
+        font-size: 20px;
+        @include align-left;
+    }
+
+    .credit {
+        grid-area: credit;
+    }
+}
+
+.col {
+    display: flex;
+    width: 100%;
+
+    &-center > :is(div, p) {
+        text-align: center;
+    }
+
+    & > div {
+        padding: 10px;
+        width: 50%;
+        height: 100%;
+        flex-grow: 1;
+    }    
+}

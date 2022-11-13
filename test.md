@@ -2,7 +2,7 @@
 title: MyPresentation
 # theme: solarized
 revealOptions: 
-    transition: 'concave'
+    transition: 'convex'
     width: 100%
     height: 100%
     margin: 0
@@ -11,24 +11,23 @@ revealOptions:
     controls: true
     slideNumber: true
     progress: true
-    markdown: 
-        smartypants: true
 ---
 
-<!-- .slide: class="title" -->
-
-<div>
-
-![Logo](./themes/assets/pastel/logo.svg) <!-- .element: class="logo" -->
+<!-- .slide: class="cover" -->
 
 <div class="titles">
 
 # My presentation
+
 ## An amazing presentation 
 
 </div>
 
+![Logo](./themes/assets/pastel/logo.svg) <!-- .element: class="logo" -->
+
 <div class="credit">
+
+-----
 
 By Yann Zavattero
 
@@ -38,11 +37,20 @@ And also Reveal-md
 
 </div>
 
-</div>
+---
+
+<!-- .slide: class="title" -->
+
+# Title page
 
 ---
 
-# **Title page** 
+
+<!-- .slide: class="title" -->
+
+# Title page
+
+## Sub title
 
 ---
 
@@ -82,7 +90,7 @@ Reveal.configure({ backgroundTransition: 'zoom' })
 
 # Code
 
-<div class="col">
+<div class="rows">
 <div>
 Code 1 :
 

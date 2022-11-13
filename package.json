@@ -1,12 +1,15 @@
 {
-  "name": "marp-style",
+  "name": "reveal-md-style",
   "version": "1.0.0",
-  "description": "A custom theme style for marp presentation",
+  "description": "A custom theme style for revealjs presentation generate from markdown with reveal-md",
   "scripts": {
-    "sass": "sass --watch --no-source-map themes/scss:themes/css"
+    "sass": "sass --watch --no-source-map themes/scss/list:themes/css",
+    "static": "reveal-md test.md --static",
+    "serve": "reveal-md test.md -w --css themes/css/pastel.css --disable-auto-open",
+    "test-preproc": "reveal-md preproc-test.md --preprocessor preproc.js"
   },
   "dependencies": {
-    "reveal.js": "^4.4.0",
+    "reveal-md": "5.3.4",
     "sass": "1.56.0"
   },
   "author": "Yann Zavattero",

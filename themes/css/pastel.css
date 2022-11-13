@@ -1,37 +1,47 @@
-.reveal .slides section.title {
-  height: calc(100vh - 8vmin);
-  margin: 4vmin;
-  width: calc(100vw - 8vmin);
-  top: 0 !important;
-  margin-left: 22vw;
-  width: calc(100vw - 4vmin - 22vw);
-  font-size: 13px;
-  background-color: red;
+.rows {
+  display: flex;
 }
-.reveal .slides section.title > div {
+.rows > * {
+  flex-basis: 100%;
+}
+
+.reveal .slides section.cover {
+  margin: 4vmax;
+  top: 0 !important;
+  height: calc(100vh - 8vmax);
+  width: calc(100vw - 8vmax);
   display: grid !important;
-  height: 100%;
-  width: 100%;
+  font-size: 13px;
+  background: #A7ACD9;
   grid-template-areas: "logo logo" "titles titles" ". credit";
   grid-template-columns: auto 40%;
   grid-template-rows: 6vmin 1fr auto;
   box-sizing: border-box;
   padding: 10vmin;
 }
-.reveal .slides section.title > div p:has(img), .reveal .slides section.title > div .logo {
+@media screen and (min-width: 768px) {
+  .reveal .slides section.cover {
+    width: calc(100vw - 4vmin - 22vw);
+    margin-left: 22vw;
+  }
+}
+.reveal .slides section.cover p:has(img) {
+  margin: 0 !important;
+}
+.reveal .slides section.cover p:has(img) > .logo {
   grid-area: logo;
   width: 25vmin;
   margin: 0 !important;
   justify-self: left;
   align-self: center;
 }
-.reveal .slides section.title > div .titles {
+.reveal .slides section.cover .titles {
   grid-area: titles;
   font-size: 20px;
   justify-self: left;
   align-self: center;
 }
-.reveal .slides section.title > div .credit {
+.reveal .slides section.cover .credit {
   grid-area: credit;
 }
 
@@ -49,10 +59,93 @@
   flex-grow: 1;
 }
 
+.rows {
+  display: flex;
+}
+.rows > * {
+  flex-basis: 100%;
+}
+
+.reveal .slides section.title {
+  margin: 4vmax;
+  top: 0 !important;
+  height: calc(100vh - 8vmax);
+  width: calc(100vw - 8vmax);
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #A7ACD9;
+}
+
+.reveal .code-wrapper code {
+  white-space: break-spaces;
+}
+
 .slide-number {
   font-size: 15px !important;
 }
 
+@media screen and (min-width: 0px) {
+  .reveal h1 {
+    font-size: 13px;
+  }
+}
+@media screen and (min-width: 576px) {
+  .reveal h1 {
+    font-size: 16px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .reveal h1 {
+    font-size: 19px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .reveal h1 {
+    font-size: 23px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .reveal h1 {
+    font-size: 25px;
+  }
+}
+@media screen and (min-width: 1400px) {
+  .reveal h1 {
+    font-size: 27px;
+  }
+}
+@media screen and (min-width: 0px) {
+  .reveal h2 {
+    font-size: 10px;
+  }
+}
+@media screen and (min-width: 576px) {
+  .reveal h2 {
+    font-size: 13px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .reveal h2 {
+    font-size: 16px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .reveal h2 {
+    font-size: 20px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .reveal h2 {
+    font-size: 22px;
+  }
+}
+@media screen and (min-width: 1400px) {
+  .reveal h2 {
+    font-size: 24px;
+  }
+}
 .reveal {
-  background-image: url(../assets/pastel/pattern.svg);
+  background: linear-gradient(-45deg, #A88BEB, #F8CEEC);
 }
