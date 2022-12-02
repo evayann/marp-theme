@@ -1,5 +1,5 @@
 @mixin section($margin: 0) {
-    margin: $margin;
+	margin: $margin;
 	top: 0 !important;
 
 	@if ($margin == 0) {
@@ -8,7 +8,7 @@
 	}
 	@else {
 		height: calc(100vh - #{2 * $margin});
-		width: calc(100vw - #{2* $margin});
+		width: calc(100vw - #{2 * $margin});
 	}
 }
 

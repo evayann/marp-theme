@@ -13,7 +13,7 @@ revealOptions:
     progress: true
 ---
 
-<!-- .slide: class="cover" -->
+<!-- .slide: class="cover" style="--color: linear-gradient(45deg, red, blue)" -->
 
 <div class="titles">
 

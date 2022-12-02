@@ -12,7 +12,7 @@
   width: calc(100vw - 8vmax);
   display: grid !important;
   font-size: 13px;
-  background: #A7ACD9;
+  background: var(--color, #A7ACD9);
   grid-template-areas: "logo logo" "titles titles" ". credit";
   grid-template-columns: auto 40%;
   grid-template-rows: 6vmin 1fr auto;

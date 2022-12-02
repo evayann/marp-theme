@@ -23,7 +23,7 @@
     display: grid !important;
 
     font-size: 13px;
-    background: $primary;
+    background: var(--color, $primary);
     
     grid-template-areas:
         "logo logo"
