@@ -1,16 +1,16 @@
 ---
 title: MyPresentation
 # theme: solarized
-revealOptions: 
-    transition: 'convex'
-    width: 100%
-    height: 100%
-    margin: 0
-    # controlsLayout: edges
-    # mouseWheel: true
-    controls: true
-    slideNumber: true
-    progress: true
+revealOptions:
+  transition: "convex"
+  width: 100%
+  height: 100%
+  margin: 0
+  # controlsLayout: edges
+  # mouseWheel: true
+  controls: true
+  slideNumber: true
+  progress: true
 ---
 
 <!-- .slide: class="cover" style="--color: linear-gradient(45deg, red, blue)" -->
@@ -19,15 +19,13 @@ revealOptions:
 
 # My presentation
 
-## An amazing presentation 
+## An amazing presentation
 
 </div>
 
 ![Logo](./themes/assets/pastel/logo.svg) <!-- .element: class="logo" -->
 
 <div class="credit">
-
------
 
 By Yann Zavattero
 
@@ -39,12 +37,31 @@ And also Reveal-md
 
 ---
 
+<!-- .slide: class="cover" -->
+
+<div class="titles">
+
+# Title
+
+## Subtitle
+
+</div>
+
+![Logo](./themes/assets/pastel/logo.svg) <!-- .element: class="logo" -->
+
+<div class="credit">
+
+Credit
+
+</div>
+
+---
+
 <!-- .slide: class="title" -->
 
 # Title page
 
 ---
-
 
 <!-- .slide: class="title" -->
 
@@ -60,7 +77,7 @@ And also Reveal-md
 
 ---
 
-# List 
+# List
 
 - A
 - B
@@ -71,55 +88,57 @@ And also Reveal-md
 Bye
 
 ---
-<!-- .slide: data-transition="slide" data-background="#000" -->
-Sub Bar 
 
-* Frag 1 <!-- .element: class="fragment fade-up" -->
-* Frag 2 <!-- .element: class="fragment highlight-red" -->
+<!-- .slide: data-transition="slide" data-background="#000" -->
+
+Sub Bar
+
+- Frag 1 <!-- .element: class="fragment fade-up" -->
+- Frag 2 <!-- .element: class="fragment highlight-red" -->
 
 ---
 
 <!-- <section data-background="#4d7e65" data-background-transition="zoom" data-markdown> -->
+
 # Background Transitions <!-- .parent: class="test" -->
+
 Different background transitions are available via the backgroundTransition option. This one's called "zoom".
+
 ```js
-Reveal.configure({ backgroundTransition: 'zoom' })
+Reveal.configure({ backgroundTransition: "zoom" });
 ```
 
 ---
 
-# Code
+# Grid-3
 
-<div class="rows">
-<div>
-Code 1 :
+<div class="grid-3">
 
-```ts
-function A(x: number): number { /* ... */ }
-function B(x: number): number { /* ... */ }
-function C(x: number): number { /* ... */ }
-```
+<div class="card">
+
+![Logo](./themes/assets/pastel/logo.svg) <!-- .element: class="logo" -->
+
+### Test
+
+Contenu de la carte de test
+
 </div>
 
-<div>
-Code 2 :
+De
 
-```ts
-class X {
-    constructor(private x: number) { }
-    A(): number { /* ... */ }
-    B(): number { /* ... */ }
-    C(): number { /* ... */ }
-}
-```
+La Grille
+
+<div class="card">
+
+De taille 3
+
 </div>
 
-<div>
-<p>lalalall</p>
-</div>
+éé
+
 </div>
 
-----
+---
 
 ```js [|1|5-6]
 class X {
@@ -132,7 +151,67 @@ class X {
 
 Note: test
 
-----
+---
+
+# Code
+
+<div class="rows">
+<div>
+Code 1 :
+
+```ts
+function A(x: number): number {
+  /* ... */
+}
+function B(x: number): number {
+  /* ... */
+}
+function C(x: number): number {
+  /* ... */
+}
+```
+
+</div>
+
+<div>
+Code 2 :
+
+```ts
+class X {
+  constructor(private x: number) {}
+  A(): number {
+    /* ... */
+  }
+  B(): number {
+    /* ... */
+  }
+  C(): number {
+    /* ... */
+  }
+}
+```
+
+</div>
+
+<div>
+<p>lalalall</p>
+</div>
+</div>
+
+---
+
+```js [|1|5-6]
+class X {
+    constructor(private x: number) { }
+    A(): number { /* ... */ }
+    B(): number { /* ... */ }
+    C(): number { /* ... */ }
+}
+```
+
+Note: test
+
+---
 
 ```js [|1|5-6]
 class X {
@@ -154,7 +233,6 @@ class Y {
 
 Note: test
 
-
 ---
 
 <!-- .slide: class:"title" data-transition="convex" data-background="#aa0" -->
@@ -164,7 +242,7 @@ Note: test
 ## Sous titre 1
 
 Aller
-Encore 
+Encore
 Du
 text <!-- .element: class="test" -->
 
@@ -178,26 +256,25 @@ Des espaces
 
 ---
 
-# List point by point 
+# List point by point
 
-1) a
-2) b
-3) c
-4) d
+1. a
+2. b
+3. c
+4. d
 
 ---
 
 A table
 
-|A  | B |  C|
-|---|---|---|
-| 1 | 2 | 3 |
-
+| A   | B   | C   |
+| --- | --- | --- |
+| 1   | 2   | 3   |
 
 ---
 
 # Une belle tablé !
 
-|A  | B |  C|
-|---|---|---|
-| 1 | 2 | 3 |
+| A   | B   | C   |
+| --- | --- | --- |
+| 1   | 2   | 3   |

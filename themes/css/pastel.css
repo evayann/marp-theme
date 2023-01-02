@@ -1,10 +1,101 @@
 .rows {
   display: flex;
+  gap: 10px;
 }
 .rows > * {
   flex-basis: 100%;
 }
 
+.grid-2 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-5 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.grid-6 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-7 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.grid-8 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.grid-9 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.grid-10 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.grid-11 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(11, 1fr);
+}
+
+.grid-12 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  border-radius: 10px;
+  height: 300px;
+}
+.card p:has(img) {
+  margin: 0 !important;
+}
+.card p:has(img) > * {
+  flex-basis: 50%;
+}
 .reveal .slides section.cover {
   margin: 4vmax;
   top: 0 !important;
@@ -61,11 +152,102 @@
 
 .rows {
   display: flex;
+  gap: 10px;
 }
 .rows > * {
   flex-basis: 100%;
 }
 
+.grid-2 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-5 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.grid-6 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-7 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.grid-8 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.grid-9 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(9, 1fr);
+}
+
+.grid-10 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.grid-11 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(11, 1fr);
+}
+
+.grid-12 {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  border-radius: 10px;
+  height: 300px;
+}
+.card p:has(img) {
+  margin: 0 !important;
+}
+.card p:has(img) > * {
+  flex-basis: 50%;
+}
 .reveal .slides section.title {
   margin: 4vmax;
   top: 0 !important;
