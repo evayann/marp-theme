@@ -2,26 +2,32 @@
 title: PreprocTest
 ---
 
-# h1 
+..cover
+# Title
+## Subtitle
+@img(./themes/assets/pastel/logo.svg)
+..credits
 
-## h2
+By le Z
 
-## h2
-
-### h3
+Aka Yann Zavattero
+..
+..
 
 ---
 
-No title
+..grid-3x2
+## 1
+2
+3
+4
+5
+6
+..
 
 ---
 
-# h1
-
-----
-
-Vertical split 
-
-----
-
-With Header
+..card
+test
+@img(./themes/assets/pastel/logo.svg)
+..

@@ -1,142 +1,121 @@
-class Line {
-    constructor(line) {
-        this.l = line;
+const MD = "markdown";
+
+const DIV_START = /\.\.(?!grid)(.*)/;
+const DIV_END = "..";
+const DIV = "div";
+
+const GRID_START = /..grid-[0-9]+x[0-9]+/;
+const GRID_END = "..";
+const GRID = "grid";
+
+const IMG_REGEX = /@img\((.*)\)/;
+const IMG = "image";
+
+const VANILA = "vanila";
+
+class Tokenizer {
+    constructor(string) {
+        this.initTokenization(string);
+
+        this.tokens = this.tokenize();
     }
 
-    // compute(currentLevel) {
-    //     if (this.isHeader) {
-    //         return this.getSection(currentLevel);
-    //     }
-    //     else if (this.isSplit) {
-    //         return this.closeSection(currentLevel);
-    //     }
-    //     else if (this.isClass) {
-    //         return this.output(currentLevel, this.class);
-    //     }
-    //     else if (this.isEndClass) {
-    //         return this.output(currentLevel, this.endClass);
-    //     }
-    //     else {
-    //         return this.output(currentLevel, this.l);
-    //     }
-    // }
-
-    //#region Section
-    getSection(level) {
-        const l = this.headerLevel;
-        return this.output(l, l > level ? `<div class="section-${l}">\n\n${this.l}` : `${this.l}\n\n</div>`);
+    tokenize() {
+        return { type: MD, content: this.tokenizeContent(MD) };
     }
 
-    closeSection(level) {
-        if (level === 0)
-            return this.output(0, this.l);
+    tokenizeContent(caller, stopToken = undefined) {
+        const contents = [];
 
-        let close = "";
-        for (let i = level - 1; i--;)
-            close += "</div>\n";
-        return this.output(0, `${close}</div>\n\n${this.l}\n`);
-    }
-    //#endregion
+        while (this.nextToken !== stopToken) {
+            if (this.nextToken === undefined && stopToken !== undefined)
+                throw new Error(`Need to have ${stopToken} to close a ${caller}`);
 
-    //#region Header
-    get isHeader() {
-        return /^#/.test(this.l);
-    }
+            if (IMG_REGEX.test(this.nextToken)) contents.push(this.tokenizeImage());
+            else if (GRID_START.test(this.nextToken))
+                contents.push(this.tokenizeGrid());
+            else if (DIV_START.test(this.nextToken))
+                contents.push(this.tokenizeDiv());
+            else contents.push(this.tokenizeVanila());
 
-    get headerLevel() {
-        return this.nbOcurrences("#");
-    }
-    //#endregion
+            this.consumeToken();
+        }
 
-    //#region Split
-    get isSplit() {
-        return /^---/.test(this.l);
-    }
-    //#endregion Split
-
-    //#region Class
-    get isClass() {
-        return /^\.\./.test(this.l);
+        return contents;
     }
 
-    get class() {
-        const list = this.l.substring(2).trim();
-        return `<div class="${list}">\n`;
+    tokenizeDiv() {
+        const divType = this.nextToken.match(DIV_START)[1];
+        this.consumeToken();
+        const divContent = this.tokenizeContent(DIV, DIV_END);
+        return { type: DIV, div: divType, content: divContent };
     }
 
-    get isEndClass() {
-        return /^\/\.\./.test(this.l);
+    tokenizeGrid() {
+        const size = this.nextToken.replace("..grid-", "").split("x");
+        this.consumeToken();
+        const gridContent = this.tokenizeContent(GRID, GRID_END);
+        return { type: GRID, size, content: gridContent };
     }
 
-    get endClass() {
-        return "\n</div>";
-    }
-    //#endregion
-
-    //#region private
-    nbOcurrences(pattern) {
-        return (this.l.match(new RegExp(pattern, "g")) || []).length;
+    tokenizeImage() {
+        return { type: IMG, link: this.nextToken.match(IMG_REGEX)[1] };
     }
 
-    output(level, string) {
-        return [level, string];
+    tokenizeVanila() {
+        return { type: VANILA, value: this.nextToken };
     }
-    //#endregion
+
+    initTokenization(string) {
+        this.lines = string.split("\n");
+        this.consumeToken();
+    }
+
+    consumeToken() {
+        this.nextToken = this.lines.shift()?.trim();
+    }
 }
 
-class Parser {
-    constructor(md) {
-        this.md = md;
-    }
+function parse(md) {
+    return parseTokens(md.content).join('\n');
+}
 
-    parse() {
-        let currentLevel = 0;
-        const lines = md.split("\n");
-        const parseLines = lines.map(line => {
-            const l = new Line(line);
-            const [level, text] = l.compute(currentLevel);
-            currentLevel = level;
-            return text;
-        });
+function parseTokens(tokens) {
+    return tokens.map(parseToken);
+}
 
-        let parsedMd = openSlide();
-        return parsedMd;
-    }
+function parseToken(token) {
+    if (token.type === VANILA) return [token.value];
+    else if (token.type === IMG) return parseImage(token.link);
+    else if (token.type === DIV) return simpleWrapper(token.div, token.content);
+    else if (token.type === GRID) return parseGrid(token.size, token.content);
+}
 
-    compute(currentLevel, l) {
-        if (l.isHeader) {
-            return l.getSection(currentLevel);
-        }
-        else if (l.isSplit) {
-            return l.closeSection(currentLevel);
-        }
-        else if (l.isClass) {
-            return l.output(currentLevel, l.class);
-        }
-        else if (this.isEndClass) {
-            return l.output(currentLevel, l.endClass);
-        }
-        else {
-            return l.output(currentLevel, l.l);
-        }
-    }
+function parseImage(link) {
+    return [`<img src="${link}" alt="Image ${link} not found !"/>`];
+}
+
+function parseGrid(size, contents) {
+    const [nbRows, nbColums] = size;
+    return [
+        `<div class="grid" style="display: grid; grid-template-rows: repeat(${nbRows}, 1fr); grid-template-columns: repeat(${nbColums}, 1fr)">`,
+        ...contents.flatMap(parseToken),
+        '</div>'
+    ];
+}
+
+function simpleWrapper(classes, contents) {
+    return [
+        `<div class="${Array.isArray(classes) ? classes.join(', ') : classes}">`,
+        ...contents.flatMap(parseToken),
+        '</div>'
+    ];
 }
 
 module.exports = (markdown, options) => {
     return new Promise((resolve, reject) => {
-        let currentLevel = 0;
-        const parse = md =>
-        md
-        .split('\n')
-        .map((line) => {
-            const l = new Line(line);
-            const [level, text] = l.compute(currentLevel);
-            currentLevel = level;
-            return text;
-        })
-        .join('\n');
-
-        console.log(parse(markdown));
-        return resolve(parse(markdown));
+        const tokenizer = new Tokenizer(markdown);
+        console.log(tokenizer.tokens.content[tokenizer.tokens.content.length - 2]);
+        return resolve(parse(tokenizer.tokens));
     });
-  };
+};
