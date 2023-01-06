@@ -1,0 +1,14 @@
+@import "./utilities/utilities";
+
+.reveal .slides {
+    width: 100vw !important;
+    height: 100vh !important;
+    inset: unset !important;
+    transform: unset !important;
+    @include center;
+}
+
+.reveal .slides section {
+    @include section;
+    @include center;
+}

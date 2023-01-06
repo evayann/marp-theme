@@ -3,11 +3,14 @@ title: PreprocTest
 ---
 
 ..cover
-# Title
-## Subtitle
-@img(./themes/assets/pastel/logo.svg)
-..credits
 
+# Title
+
+## Subtitle
+
+@img(./themes/assets/pastel/logo.svg)
+
+..credits
 By le Z
 
 Aka Yann Zavattero
@@ -16,18 +19,40 @@ Aka Yann Zavattero
 
 ---
 
-..grid-3x2
-## 1
-2
-3
-4
-5
-6
+..card
+
+### test
+
+@img(./themes/assets/pastel/logo.svg)
+
+lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla
 ..
 
 ---
 
+..grid-3x2
+
+## 1
+
+2
+
+### 3
+
 ..card
-test
+### Card 4
+
 @img(./themes/assets/pastel/logo.svg)
 ..
+
+5
+
+..card
+### Card 6
+
+@img(./themes/assets/pastel/logo.svg)
+
+lorem ipsum blablabla lorem
+..
+
+..
+

@@ -20,16 +20,6 @@
 	align-items: center;
 }
 
-@mixin img($class: "*") {
-	p:has(img) {
-		margin: 0 !important;
-	}
-
-	p:has(img)>#{$class} {
-		@content;
-	}
-}
-
 .rows {
 	display: flex;
 
@@ -40,28 +30,15 @@
 	}
 }
 
-$sizes: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
-
-@each $size in $sizes {
-	.grid-#{$size} {
-		display: grid;
-
-		gap: 10px;
-
-		grid-template-rows: 1fr;
-		grid-template-columns: repeat($size, 1fr);
-	}
-}
-
 .card {
 	display: flex;
 	flex-direction: column;
 	background-color: black;
 	border-radius: 10px;
 
-	height: 300px;
+	height: min(100%, 150px);
 
-	@include img {
+	img {
 		flex-basis: 50%;
 	}
 

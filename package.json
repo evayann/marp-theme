@@ -6,7 +6,7 @@
     "sass": "sass --watch --no-source-map themes/scss/list:themes/css",
     "static": "reveal-md test.md --static",
     "serve": "reveal-md test.md -w --css themes/css/pastel.css --disable-auto-open",
-    "test-preproc": "reveal-md preproc-test.md --preprocessor preproc.js"
+    "test-preproc": "reveal-md preproc-test.md -w --css themes/css/pastel.css --preprocessor preproc.js"
   },
   "dependencies": {
     "reveal-md": "5.3.4",

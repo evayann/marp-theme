@@ -1,17 +1,17 @@
-const MD = "markdown";
+const MD = 'markdown';
 
 const DIV_START = /\.\.(?!grid)(.*)/;
-const DIV_END = "..";
-const DIV = "div";
+const DIV_END = '..';
+const DIV = 'div';
 
 const GRID_START = /..grid-[0-9]+x[0-9]+/;
-const GRID_END = "..";
-const GRID = "grid";
+const GRID_END = '..';
+const GRID = 'grid';
 
 const IMG_REGEX = /@img\((.*)\)/;
-const IMG = "image";
+const IMG = 'image';
 
-const VANILA = "vanila";
+const VANILA = 'vanila';
 
 class Tokenizer {
     constructor(string) {
@@ -52,7 +52,7 @@ class Tokenizer {
     }
 
     tokenizeGrid() {
-        const size = this.nextToken.replace("..grid-", "").split("x");
+        const size = this.nextToken.replace('..grid-', '').split('x');
         this.consumeToken();
         const gridContent = this.tokenizeContent(GRID, GRID_END);
         return { type: GRID, size, content: gridContent };
@@ -67,7 +67,7 @@ class Tokenizer {
     }
 
     initTokenization(string) {
-        this.lines = string.split("\n");
+        this.lines = string.split('\n');
         this.consumeToken();
     }
 
@@ -77,45 +77,58 @@ class Tokenizer {
 }
 
 function parse(md) {
-    return parseTokens(md.content).join('\n');
+    return parseTokens(md.content);
 }
 
 function parseTokens(tokens) {
-    return tokens.map(parseToken);
+    return tokens.map((token) => parseToken(token).trim()).join('\n');
 }
 
 function parseToken(token) {
-    if (token.type === VANILA) return [token.value];
+    if (token.type === VANILA) return token.value;
     else if (token.type === IMG) return parseImage(token.link);
-    else if (token.type === DIV) return simpleWrapper(token.div, token.content);
-    else if (token.type === GRID) return parseGrid(token.size, token.content);
+    else if (token.type === DIV)
+        return divWrapper(token.content, { classes: token.div });
+    else if (token.type === GRID) return parseGrid(token.content, token.size);
 }
 
 function parseImage(link) {
-    return [`<img src="${link}" alt="Image ${link} not found !"/>`];
+    return `<img src="${link}" alt="Image ${link} not found !"/>`;
 }
 
-function parseGrid(size, contents) {
+function parseGrid(tokens, size) {
     const [nbRows, nbColums] = size;
-    return [
-        `<div class="grid" style="display: grid; grid-template-rows: repeat(${nbRows}, 1fr); grid-template-columns: repeat(${nbColums}, 1fr)">`,
-        ...contents.flatMap(parseToken),
-        '</div>'
-    ];
+    return divWrapper(tokens, {
+        classes: 'grid',
+        style: {
+            display: 'grid',
+            'grid-template-rows': `repeat(${nbRows}, 1fr)`,
+            'grid-template-columns': `repeat(${nbColums}, 1fr)`,
+        },
+    });
 }
 
-function simpleWrapper(classes, contents) {
-    return [
-        `<div class="${Array.isArray(classes) ? classes.join(', ') : classes}">`,
-        ...contents.flatMap(parseToken),
-        '</div>'
-    ];
+function divWrapper(tokens, { classes = undefined, style = undefined } = {}) {
+    const classesTag =
+        classes !== undefined ? `class="${computeClasses(classes)}"` : '';
+    const styleTag = style !== undefined ? `style="${computeStyle(style)}"` : '';
+    const parsedContent = parseTokens(tokens);
+    return `<div ${classesTag} ${styleTag}>\n\n${parsedContent}\n</div>`;
+}
+
+function computeClasses(classes) {
+    return Array.isArray(classes) ? classes.join(', ') : classes;
+}
+
+function computeStyle(style) {
+    return Object.entries(style)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('; ');
 }
 
 module.exports = (markdown, options) => {
     return new Promise((resolve, reject) => {
         const tokenizer = new Tokenizer(markdown);
-        console.log(tokenizer.tokens.content[tokenizer.tokens.content.length - 2]);
         return resolve(parse(tokenizer.tokens));
     });
 };

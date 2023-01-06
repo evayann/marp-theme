@@ -12,26 +12,25 @@
     align-self: center;
 }
 
-.reveal .slides section.cover {
+.reveal .slides section:has(div.cover) {
     @include section(4vmax);
 
     @include md {
-	    width: calc(100vw - 4vmin - 22vw);
-	    margin-left: 22vw;
+        width: calc(100vw - 4vmin - 22vw);
+        margin-left: 22vw;
     }
 
     display: grid !important;
 
     font-size: 13px;
     background: var(--color, $primary);
-    
-    grid-template-areas:
-        "logo logo"
-        "titles titles"
-        ". credit";
+
+    grid-template-areas: "logo logo"
+    "titles titles"
+    ". credit";
     grid-template-columns: auto 40%;
     grid-template-rows: 6vmin 1fr auto;
-    
+
     box-sizing: border-box;
     padding: 10vmin;
 
@@ -42,7 +41,7 @@
     //     @include align-left;
     // }
 
-    @include img(".logo") {
+    img {
         grid-area: logo;
         width: 25vmin;
         margin: 0 !important;
@@ -64,14 +63,14 @@
     display: flex;
     width: 100%;
 
-    &-center > :is(div, p) {
+    &-center> :is(div, p) {
         text-align: center;
     }
 
-    & > div {
+    &>div {
         padding: 10px;
         width: 50%;
         height: 100%;
         flex-grow: 1;
-    }    
+    }
 }
