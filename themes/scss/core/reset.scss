@@ -11,4 +11,6 @@
 .reveal .slides section {
     @include section;
     @include center;
+    gap: 10px;
+    font-size: 1cqi;
 }

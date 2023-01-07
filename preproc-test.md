@@ -30,6 +30,26 @@ lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum bl
 
 ---
 
+..card
+
+### test
+
+@img(./themes/assets/pastel/logo.svg)
+
+lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla
+..
+
+..card
+
+### test
+
+@img(./themes/assets/pastel/logo.svg)
+
+lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla
+..
+
+---
+
 ..grid-3x2
 
 ## 1
