@@ -1,13 +1,13 @@
 $primary: #A7ACD9;
 
-@import "../core/reset.scss";
+@use "../core/reset";
 
-@import "../core/layout/layout";
+@use "../core/layout/layout";
 
-@import "../core/utilities/code";
+@use "../core/utilities/code";
 
-@import "../core/pagination/number";
-@import "../core/utilities/font-size";
+@use "../core/pagination/number";
+@use "../core/utilities/font-size";
 
 .reveal {
     // background-image: url(../assets/pastel/pattern.svg);

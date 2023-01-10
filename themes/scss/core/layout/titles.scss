@@ -1,8 +1,8 @@
-@import "../utilities/utilities";
-@import "./colors";
+@use "../utilities/utilities" as utils;
+@use "./colors";
 
 .reveal .slides section.title {
-    @include section(4vmax);
-    @include center;
+    @include utils.section(4vmax);
+    @include utils.center;
     background: $primary;
 }

@@ -1,16 +1,16 @@
-@import "./utilities/utilities";
+@use "./utilities/utilities" as utils;
 
 .reveal .slides {
     width: 100vw !important;
     height: 100vh !important;
     inset: unset !important;
     transform: unset !important;
-    @include center;
+    @include utils.center;
 }
 
 .reveal .slides section {
-    @include section;
-    @include center;
+    @include utils.section;
+    @include utils.center;
     gap: 10px;
     font-size: 1cqi;
 }

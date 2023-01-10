@@ -1,27 +1,26 @@
-@import "./breakpoints";
+@use "./breakpoints" as bk;
 
 $font-size: (
-    "h1": (
-        $xs: 13px,
-        $sm: 16px,
-        $md: 19px,
-        $lg: 23px,
-        $xl: 25px,
-        $xxl: 27px
-    ),
-    "h2": (
-        $xs: 10px,
-        $sm: 13px,
-        $md: 16px,
-        $lg: 20px,
-        $xl: 22px,
-        $xxl: 24px
-    )
+    "h1": (bk.$xs: 13px,
+        bk.$sm: 16px,
+        bk.$md: 19px,
+        bk.$lg: 23px,
+        bk.$xl: 25px,
+        bk.$xxl: 27px),
+    "h2": (bk.$xs: 10px,
+        bk.$sm: 13px,
+        bk.$md: 16px,
+        bk.$lg: 20px,
+        bk.$xl: 22px,
+        bk.$xxl: 24px)
 );
 
-@each $type, $sizes in $font-size {
-    @each $breakpoint, $size in $sizes {
-        @include breakpoint($breakpoint) {
+@each $type,
+$sizes in $font-size {
+
+    @each $breakpoint,
+    $size in $sizes {
+        @include bk.breakpoint($breakpoint) {
             .reveal #{$type} {
                 font-size: $size;
             }

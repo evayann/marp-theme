@@ -1,0 +1,43 @@
+.rows {
+  display: flex;
+  gap: 10px;
+}
+.rows > * {
+  flex-basis: 100%;
+}
+
+.card {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  border-radius: 10px;
+  height: min(100%, 150px);
+}
+.card img {
+  flex-basis: 50%;
+}
+.reveal .slides {
+  width: 100vw !important;
+  height: 100vh !important;
+  inset: unset !important;
+  transform: unset !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.reveal .slides section {
+  margin: 0;
+  top: 0 !important;
+  height: 100vh;
+  width: 100vw;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 1cqi;
+}

@@ -1,5 +1,5 @@
-@import "../utilities/utilities";
-@import "../utilities/breakpoints";
+@use "../utilities/utilities" as utils;
+@use "../utilities/breakpoints" as bk;
 
 @mixin grid {
     display: grid !important;
@@ -13,9 +13,9 @@
 }
 
 .reveal .slides section:has(div.cover) {
-    @include section(4vmax);
+    @include utils.section(4vmax);
 
-    @include md {
+    @include bk.md {
         width: calc(100vw - 4vmin - 22vw);
         margin-left: 22vw;
     }
