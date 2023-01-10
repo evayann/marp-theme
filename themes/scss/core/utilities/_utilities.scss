@@ -20,7 +20,7 @@
 	align-items: center;
 }
 
-.rows {
+.columns {
 	display: flex;
 
 	gap: 10px;
@@ -35,7 +35,7 @@
 	background-color: black;
 	border-radius: 10px;
 
-	height: min(100%, 150px);
+	// height: min(100%, 150px);
 
 	img {
 		flex-basis: 50%;

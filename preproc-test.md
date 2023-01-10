@@ -4,9 +4,11 @@ title: PreprocTest
 
 ..cover
 
-# Title
+..titles
+# Comment rédiger une présentation stylé
 
-## Subtitle
+## Du markdown au meilleur prez, il n'y a qu'un pas
+..
 
 @img(./themes/assets/pastel/logo.svg)
 
@@ -19,16 +21,14 @@ Aka Yann Zavattero
 
 ---
 
-..card
+## Une slide avec juste du très long texte. C'est fou ca quand même ?! 
 
-### test
+Bon aller lorem ipsm a gogo !
 
-@img(./themes/assets/pastel/logo.svg)
+Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit maiores laboriosam, possimus vitae nesciunt adipisci sit dolorem dicta repellat voluptatibus aliquid ut accusantium, fugiat dolorum beatae nemo rerum itaque architecto?
 
-lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla
-..
 
----
+--- 
 
 ..card
 
@@ -39,13 +39,26 @@ lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum bl
 lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla
 ..
 
+----
+
+## Une slide
+
+Avec un contenu interessant 
+
+..columns
+
 ..card
+Carte 1
+..
 
-### test
+..card
+Carte 2
+..
 
-@img(./themes/assets/pastel/logo.svg)
+..card
+Carte 3
+..
 
-lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla
 ..
 
 ---
@@ -76,3 +89,55 @@ lorem ipsum blablabla lorem
 
 ..
 
+---
+
+## Et une liste md
+
+- Ma liste
+- Incroyable
+    + Avec une sous liste
+    + Au top
+- Et oui !
+
+--- 
+
+## Du code ?
+
+```js[|1|3|5|]
+const numbers = [1, 2, 3, 4, 5];
+
+const odds = number.filter(v => v % 2 === 0);
+
+console.log(odds); // [2, 4]
+```
+
+----
+
+## Encore plus !
+
+..columns
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+const odds = number.filter(v => v % 2 === 0);
+
+console.log(odds); // [2, 4]
+```
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+const odds = number.filter(v => v % 2 === 0);
+
+console.log(odds); // [2, 4]
+```
+
+```js
+const numbers = [1, 2, 3, 4, 5];
+
+const odds = number.filter(v => v % 2 === 0);
+
+console.log(odds); // [2, 4]
+```
+..

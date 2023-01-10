@@ -11,6 +11,9 @@
 .reveal .slides section {
     @include utils.section;
     @include utils.center;
-    gap: 10px;
-    font-size: 1cqi;
+
+    // font-size: 1cqi;
+    &>* {
+        margin: 0 5px;
+    }
 }

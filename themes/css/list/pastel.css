@@ -1,8 +1,8 @@
-.rows {
+.columns {
   display: flex;
   gap: 10px;
 }
-.rows > * {
+.columns > * {
   flex-basis: 100%;
 }
 
@@ -13,7 +13,6 @@
   align-items: center;
   background-color: black;
   border-radius: 10px;
-  height: min(100%, 150px);
 }
 .card img {
   flex-basis: 50%;
@@ -38,16 +37,21 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  font-size: 1cqi;
+}
+.reveal .slides section > * {
+  margin: 0 5px;
 }
 
-.rows {
+.grid {
+  gap: 10px;
+}
+
+.columns {
   display: flex;
   gap: 10px;
 }
 
-.rows > * {
+.columns > * {
   flex-basis: 100%;
 }
 
@@ -58,7 +62,6 @@
   align-items: center;
   background-color: black;
   border-radius: 10px;
-  height: min(100%, 150px);
 }
 
 .card img {
@@ -70,7 +73,17 @@
   top: 0 !important;
   height: calc(100vh - 8vmax);
   width: calc(100vw - 8vmax);
+}
+@media screen and (min-width: 768px) {
+  .reveal .slides section:has(div.cover) {
+    width: calc(100vw - 4vmin - 22vw);
+    margin-left: 22vw;
+  }
+}
+.reveal .slides section div.cover {
   display: grid !important;
+  width: 100%;
+  height: 100%;
   font-size: 13px;
   background: var(--color, red);
   grid-template-areas: "logo logo" "titles titles" ". credit";
@@ -79,26 +92,20 @@
   box-sizing: border-box;
   padding: 10vmin;
 }
-@media screen and (min-width: 768px) {
-  .reveal .slides section:has(div.cover) {
-    width: calc(100vw - 4vmin - 22vw);
-    margin-left: 22vw;
-  }
-}
-.reveal .slides section:has(div.cover) img {
+.reveal .slides section div.cover img {
   grid-area: logo;
   width: 25vmin;
   margin: 0 !important;
   justify-self: left;
   align-self: center;
 }
-.reveal .slides section:has(div.cover) .titles {
+.reveal .slides section div.cover .titles {
   grid-area: titles;
   font-size: 20px;
   justify-self: left;
   align-self: center;
 }
-.reveal .slides section:has(div.cover) .credit {
+.reveal .slides section div.cover .credits {
   grid-area: credit;
 }
 
@@ -116,12 +123,12 @@
   flex-grow: 1;
 }
 
-.rows {
+.columns {
   display: flex;
   gap: 10px;
 }
 
-.rows > * {
+.columns > * {
   flex-basis: 100%;
 }
 
@@ -132,7 +139,6 @@
   align-items: center;
   background-color: black;
   border-radius: 10px;
-  height: min(100%, 150px);
 }
 
 .card img {

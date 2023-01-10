@@ -1,8 +1,8 @@
-.rows {
+.columns {
   display: flex;
   gap: 10px;
 }
-.rows > * {
+.columns > * {
   flex-basis: 100%;
 }
 
@@ -13,7 +13,6 @@
   align-items: center;
   background-color: black;
   border-radius: 10px;
-  height: min(100%, 150px);
 }
 .card img {
   flex-basis: 50%;
@@ -38,6 +37,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  font-size: 1cqi;
+}
+.reveal .slides section > * {
+  margin: 0 5px;
 }
