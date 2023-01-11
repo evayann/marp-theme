@@ -65,7 +65,11 @@ Carte 3
 
 ..grid-3x2
 
-## 1
+..card
+@img(./themes/assets/pastel/pattern.svg)
+
+## Card 1
+..
 
 2
 
@@ -74,7 +78,7 @@ Carte 3
 ..card
 ### Card 4
 
-@img(./themes/assets/pastel/logo.svg)
+@img(./themes/assets/pastel/pattern.svg)
 ..
 
 5
@@ -84,6 +88,8 @@ Carte 3
 
 @img(./themes/assets/pastel/logo.svg)
 
+lorem ipsum blablabla lorem
+lorem ipsum blablabla lorem
 lorem ipsum blablabla lorem
 ..
 

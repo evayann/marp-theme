@@ -12,8 +12,17 @@
     @include utils.section;
     @include utils.center;
 
-    // font-size: 1cqi;
     &>* {
         margin: 0 5px;
     }
+}
+
+.reveal .hljs {
+    min-height: auto;
+}
+
+.reveal img,
+.reveal video,
+.reveal iframe {
+    min-width: 100%;
 }

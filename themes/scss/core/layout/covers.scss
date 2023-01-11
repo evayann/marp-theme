@@ -40,13 +40,6 @@
         box-sizing: border-box;
         padding: 10vmin;
 
-        // p:has(img), .logo {
-        //     grid-area: logo;
-        //     width: 25vmin;
-        //     margin: 0 !important;
-        //     @include align-left;
-        // }
-
         img {
             grid-area: logo;
             width: 25vmin;

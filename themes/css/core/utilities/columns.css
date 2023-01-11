@@ -1,0 +1,8 @@
+.columns {
+  display: flex;
+  gap: 10px;
+  max-width: 100vw;
+}
+.columns > * {
+  min-width: 200px;
+}

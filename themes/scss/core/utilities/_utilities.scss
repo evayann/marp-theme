@@ -1,45 +1,4 @@
-@mixin section($margin: 0) {
-	margin: $margin;
-	top: 0 !important;
-
-	@if ($margin==0) {
-		height: 100vh;
-		width: 100vw;
-	}
-
-	@else {
-		height: calc(100vh - #{2 * $margin});
-		width: calc(100vw - #{2 * $margin});
-	}
-}
-
-@mixin center {
-	display: flex !important;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
-.columns {
-	display: flex;
-
-	gap: 10px;
-
-	&>* {
-		flex-basis: 100%;
-	}
-}
-
-.card {
-	@include center;
-	background-color: black;
-	border-radius: 10px;
-
-	// height: min(100%, 150px);
-
-	img {
-		flex-basis: 50%;
-	}
-
-	h3 {}
-}
+@import "breakpoints";
+@import "columns";
+@import "card";
+@import "misc";
