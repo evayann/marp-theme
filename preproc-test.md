@@ -2,12 +2,14 @@
 title: PreprocTest
 ---
 
-..cover
+---cover
 
 ..titles
+
 # Comment rédiger une présentation stylé
 
 ## Du markdown au meilleur prez, il n'y a qu'un pas
+
 ..
 
 @img(./themes/assets/pastel/logo.svg)
@@ -17,18 +19,16 @@ By le Z
 
 Aka Yann Zavattero
 ..
-..
 
 ---
 
-## Une slide avec juste du très long texte. C'est fou ca quand même ?! 
+## Une slide avec juste du très long texte. C'est fou ca quand même ?!
 
 Bon aller lorem ipsm a gogo !
 
 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit maiores laboriosam, possimus vitae nesciunt adipisci sit dolorem dicta repellat voluptatibus aliquid ut accusantium, fugiat dolorum beatae nemo rerum itaque architecto?
 
-
---- 
+---
 
 ..card
 
@@ -43,7 +43,7 @@ lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum bl
 
 ## Une slide
 
-Avec un contenu interessant 
+Avec un contenu interessant
 
 ..columns
 
@@ -61,14 +61,13 @@ Carte 3
 
 ..
 
----
-
-..grid-3x2
+---grid-3x2
 
 ..card
 @img(./themes/assets/pastel/pattern.svg)
 
 ## Card 1
+
 ..
 
 2
@@ -76,6 +75,7 @@ Carte 3
 ### 3
 
 ..card
+
 ### Card 4
 
 @img(./themes/assets/pastel/pattern.svg)
@@ -84,6 +84,7 @@ Carte 3
 5
 
 ..card
+
 ### Card 6
 
 @img(./themes/assets/pastel/logo.svg)
@@ -93,19 +94,17 @@ lorem ipsum blablabla lorem
 lorem ipsum blablabla lorem
 ..
 
-..
-
 ---
 
 ## Et une liste md
 
 - Ma liste
 - Incroyable
-    + Avec une sous liste
-    + Au top
+  - Avec une sous liste
+  - Au top
 - Et oui !
 
---- 
+---
 
 ## Du code ?
 
@@ -146,4 +145,5 @@ const odds = number.filter(v => v % 2 === 0);
 
 console.log(odds); // [2, 4]
 ```
+
 ..

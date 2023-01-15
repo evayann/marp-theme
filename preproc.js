@@ -1,134 +1,211 @@
-const MD = 'markdown';
+// import { LineReader } from "../line-reader";
+// import { parseTokens, tokenizeContent } from "../utils";
+// import { IItem } from "./item.interface";
 
-const DIV_START = /\.\.(?!grid)(.*)/;
+// interface IDiv {
+//     type: string;
+//     content: any[];
+// }
+
+const DIV_REGEX = /\.\.(?!grid)(.*)/;
 const DIV_END = '..';
-const DIV = 'div';
 
-const GRID_START = /..grid-[0-9]+x[0-9]+/;
-const GRID_END = '..';
-const GRID = 'grid';
+function isDiv(line/*: string*/)/*: boolean*/ {
+    return DIV_REGEX.test(line);
+}
+
+function divTokenizer(ln/*: LineReader*/)/*: IDiv*/ {
+    const divType = ln.line.match(DIV_REGEX)[1];
+    const divContent = tokenizeContent(ln.nextLine(), DIV_END);
+    return { type: divType, content: divContent };
+}
+
+function divParser(token/*: IDiv*/)/*: string*/ {
+    const parsedContent = parseTokens(token.content);
+    return `<div>\n\n${parsedContent}\n</div>`;
+}
+
+const div/*: IItem*/ = {
+    check: isDiv,
+    parse: divParser,
+    tokenize: divTokenizer
+};
+
+// import { IItem } from "./item.interface";
+// import { LineReader } from "../line-reader";
+
+// interface IImage {
+//     link: string;
+// }
 
 const IMG_REGEX = /@img\((.*)\)/;
-const IMG = 'image';
 
-const VANILA = 'vanila';
-
-class Tokenizer {
-    constructor(string) {
-        this.initTokenization(string);
-
-        this.tokens = this.tokenize();
-    }
-
-    tokenize() {
-        return { type: MD, content: this.tokenizeContent(MD) };
-    }
-
-    tokenizeContent(caller, stopToken = undefined) {
-        const contents = [];
-
-        while (this.nextToken !== stopToken) {
-            if (this.nextToken === undefined && stopToken !== undefined)
-                throw new Error(`Need to have ${stopToken} to close a ${caller}`);
-
-            if (IMG_REGEX.test(this.nextToken)) contents.push(this.tokenizeImage());
-            else if (GRID_START.test(this.nextToken))
-                contents.push(this.tokenizeGrid());
-            else if (DIV_START.test(this.nextToken))
-                contents.push(this.tokenizeDiv());
-            else contents.push(this.tokenizeVanila());
-
-            this.consumeToken();
-        }
-
-        return contents;
-    }
-
-    tokenizeDiv() {
-        const divType = this.nextToken.match(DIV_START)[1];
-        this.consumeToken();
-        const divContent = this.tokenizeContent(DIV, DIV_END);
-        return { type: DIV, div: divType, content: divContent };
-    }
-
-    tokenizeGrid() {
-        const size = this.nextToken.replace('..grid-', '').split('x');
-        this.consumeToken();
-        const gridContent = this.tokenizeContent(GRID, GRID_END);
-        return { type: GRID, size, content: gridContent };
-    }
-
-    tokenizeImage() {
-        return { type: IMG, link: this.nextToken.match(IMG_REGEX)[1] };
-    }
-
-    tokenizeVanila() {
-        return { type: VANILA, value: this.nextToken };
-    }
-
-    initTokenization(string) {
-        this.lines = string.split('\n');
-        this.consumeToken();
-    }
-
-    consumeToken() {
-        this.nextToken = this.lines.shift()?.trim();
-    }
+function isImage(line/*: string*/)/*: boolean*/ {
+    return IMG_REGEX.test(line);
 }
 
-function parse(md) {
-    return parseTokens(md.content);
+function imageTokenizer(ln/*: LineReader*/)/*: IImage*/ {
+    return { link: ln.line.match(IMG_REGEX)[1] };
 }
 
-function parseTokens(tokens) {
-    return tokens.map((token) => parseToken(token).trim()).join('\n');
+function imageParser(token/*: IImage*/)/*: string*/ {
+    return `<img src="${token.link}" alt="Image ${token.link} not found !"/>`;
 }
 
-function parseToken(token) {
-    if (token.type === VANILA) return token.value;
-    else if (token.type === IMG) return parseImage(token.link);
-    else if (token.type === DIV)
-        return divWrapper(token.content, { classes: token.div });
-    else if (token.type === GRID) return parseGrid(token.content, token.size);
+const image/*: IItem*/ = {
+    check: isImage,
+    parse: imageParser,
+    tokenize: imageTokenizer
+};
+
+// import { LineReader } from "../line-reader";
+
+// export interface IItem {
+//     check: (line: string) => boolean;
+//     tokenize: (ln: LineReader) => any;
+//     parse: (token: any) => string;
+// }// import { IItem } from "./item.interface";
+// import { section } from "./section";
+// import { div } from "./div";
+// import { image } from "./image";
+// import { vanila } from "./vanila";
+
+// Order sensitive
+// First match in list is take
+function getItems()/*: IItem[]*/ {
+    return [
+        image,
+        section,
+        div,
+        vanila,
+    ];
 }
 
-function parseImage(link) {
-    return `<img src="${link}" alt="Image ${link} not found !"/>`;
+// import { LineReader } from "../line-reader";
+// import { parseTokens, tokenizeContent } from "../utils";
+// import { IItem } from "./item.interface";
+
+// interface ISection {
+//     type: string;
+//     sectionType: string;
+//     isFirst: boolean;
+// }
+
+let isFirstSection = true;
+const SECTION_REGEX = /(----?)(.*)/;
+
+function isSection(line/*: string*/)/*: boolean*/ {
+    return SECTION_REGEX.test(line);
 }
 
-function parseGrid(tokens, size) {
-    const [nbRows, nbColums] = size;
-    return divWrapper(tokens, {
-        classes: 'grid',
-        style: {
-            display: 'grid',
-            'grid-template-rows': `repeat(${nbRows}, 1fr)`,
-            'grid-template-columns': `repeat(${nbColums}, 1fr)`,
-        },
-    });
+function sectionTokenizer(ln/*: LineReader*/)/*: ISection*/ {
+    const sectionType = ln.line.match(SECTION_REGEX)[1];
+    const isFirst = isFirstSection;
+    isFirstSection = false;
+    return { type: sectionType, isFirst };
 }
 
-function divWrapper(tokens, { classes = undefined, style = undefined } = {}) {
-    const classesTag =
-        classes !== undefined ? `class="${computeClasses(classes)}"` : '';
-    const styleTag = style !== undefined ? `style="${computeStyle(style)}"` : '';
-    const parsedContent = parseTokens(tokens);
-    return `<div ${classesTag} ${styleTag}>\n\n${parsedContent}\n</div>`;
+function sectionParser(token/*: ISection*/)/*: string*/ {
+    return `${token.isFirst ? '' : token.type}`;
 }
 
-function computeClasses(classes) {
-    return Array.isArray(classes) ? classes.join(', ') : classes;
+const section/*: IItem*/ = {
+    check: isSection,
+    parse: sectionParser,
+    tokenize: sectionTokenizer
+};
+
+// interface IVanila {
+//     content: string;
+// }
+
+function isVanila(line/*: string*/)/*: boolean*/ {
+    return true;
 }
 
-function computeStyle(style) {
-    return Object.entries(style)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join('; ');
+function vanilaTokenizer(ln/*: LineReader*/)/*: IVanila*/ {
+    return { content: ln.line };
 }
 
-module.exports = (markdown, options) => {
-    return new Promise((resolve, reject) => {
-        const tokenizer = new Tokenizer(markdown);
-        return resolve(parse(tokenizer.tokens));
+function vanilaParser(token/*: IVanila*/)/*: string*/ {
+    return token.content;
+}
+
+const vanila/*: IItem*/ = {
+    check: isVanila,
+    tokenize: vanilaTokenizer,
+    parse: vanilaParser
+};
+
+function improveMd(md/*: string*/)/*: string*/ {
+    const ln = new LineReader(md);
+    const tokens/*: any[]*/ = tokenizeContent(ln);
+    console.log(tokens, parseTokens(tokens));
+    return parseTokens(tokens);
+}
+
+module.exports = (markdown/*: string*/) => {
+    return new Promise((resolve) => {
+        return resolve(improveMd(markdown));
     });
 };
+
+class LineReader {
+    // lines: string[];
+    // line!: string;
+
+    static EOF = '! End of File !';
+
+    constructor(content/*: string*/) {
+        this.lines = content.split('\n');
+        this.lines.push(LineReader.EOF);
+        this.nextLine();
+    }
+
+    nextLine()/*: LineReader*/ {
+        this.line = (this.lines.shift() ?? LineReader.EOF).trim();
+        return this;
+    }
+}
+
+// import { IItem } from "./item/item.interface";
+// import { items } from "./item/item.list";
+// import { LineReader } from "./line-reader";
+
+// export interface IToken {
+//     parser: (token: any) => string,
+//     data: any;
+// }
+
+function parseTokens(tokens/*: IToken[]*/)/*: string*/ {
+    return tokens.map((token) => token.parser(token.data)).join('\n');
+}
+
+function tokenizeContent(
+    ln/*: LineReader*/,
+    stopToken/*: string*/ = LineReader.EOF
+) {
+    const contents/*: IToken[]*/ = [];
+    const caller = 'todo rename !';
+    while (ln.line !== stopToken) {
+        if (ln.line === LineReader.EOF && stopToken !== LineReader.EOF)
+            throw new Error(`Need to have ${stopToken} to close a ${caller}`);
+
+        const item/*: IItem*/ = findItem(ln.line);
+        contents.push({
+            parser: item.parse,
+            data: item.tokenize(ln)
+        });
+
+        ln.nextLine();
+    }
+
+    return contents;
+}
+
+const items/*: IItem:[]*/ = getItems();
+
+function findItem(line/*: string*/)/*: IItem*/ {
+    return items.find((item) => item.check(line));
+}
+

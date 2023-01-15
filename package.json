@@ -6,10 +6,15 @@
     "sass": "sass --watch --no-source-map themes/scss:themes/css",
     "static": "reveal-md test.md --static",
     "serve": "reveal-md test.md -w --css themes/css/pastel.css --disable-auto-open",
-    "test-preproc": "reveal-md preproc-test.md -w --css themes/css/list/pastel.css --preprocessor preproc.js"
+    "preproc": "reveal-md preproc-test.md -w --css themes/css/list/pastel.css --preprocessor preproc.js",
+    "merge-preproc": "cat ./preproc/*/* ./preproc/* > preproc.js"
   },
   "dependencies": {
-    "reveal-md": "5.3.4",
+    "reveal-md": "5.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.18",
+    "typescript": "4.9.4",
     "sass": "1.56.0"
   },
   "author": "Yann Zavattero",

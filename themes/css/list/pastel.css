@@ -128,59 +128,42 @@
   font-size: 2cqi;
 }
 
-.reveal .slides section:has(div.cover) {
+.reveal .slides section.cover {
   margin: 4vmax;
   top: 0 !important;
   height: calc(100vh - 8vmax);
   width: calc(100vw - 8vmax);
+  display: grid !important;
+  font-size: 13px;
+  background: var(--color, red);
+  grid-template-areas: "logo ." "titles titles" ". credit";
+  grid-template-columns: auto 40%;
+  grid-template-rows: 6vmin 1fr auto;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 10vmin;
 }
 @media screen and (min-width: 768px) {
-  .reveal .slides section:has(div.cover) {
+  .reveal .slides section.cover {
     width: calc(100vw - 4vmin - 22vw);
     margin-left: 22vw;
   }
 }
-.reveal .slides section div.cover {
-  display: grid !important;
-  width: 100%;
-  height: 100%;
-  font-size: 13px;
-  background: var(--color, red);
-  grid-template-areas: "logo logo" "titles titles" ". credit";
-  grid-template-columns: auto 40%;
-  grid-template-rows: 6vmin 1fr auto;
-  box-sizing: border-box;
-  padding: 10vmin;
-}
-.reveal .slides section div.cover img {
+.reveal .slides section.cover img {
   grid-area: logo;
   width: 25vmin;
   margin: 0 !important;
   justify-self: left;
   align-self: center;
 }
-.reveal .slides section div.cover .titles {
+.reveal .slides section.cover .titles {
   grid-area: titles;
   font-size: 20px;
   justify-self: left;
   align-self: center;
 }
-.reveal .slides section div.cover .credits {
+.reveal .slides section.cover .credits {
   grid-area: credit;
-}
-
-.col {
-  display: flex;
-  width: 100%;
-}
-.col-center > :is(div, p) {
-  text-align: center;
-}
-.col > div {
-  padding: 10px;
-  width: 50%;
-  height: 100%;
-  flex-grow: 1;
 }
 
 .columns {
