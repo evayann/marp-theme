@@ -7,9 +7,11 @@
 //     data: any;
 // }
 
-export interface IDataTag {
-
-}
+// export interface IDataTag {
+//     classes: string;
+//     styles: string;
+//     id: string;
+// }
 
 function parseTokens(tokens/*: IToken[]*/)/*: string*/ {
     return tokens.map((token) => token.parser(token.data)).join('\n');
@@ -24,7 +26,7 @@ function tokenizeContent(
 
     while (ln.line !== stopToken) {
         if (ln.line === LineReader.EOF && stopToken !== LineReader.EOF)
-            throw new Error(`Need to have ${stopToken} to close a ${caller}`);
+            throw new Error(`Need to have ${stopToken} to close a ${caller} on line : ${ln.lineNumber}`);
 
         const item/*: IItem*/ = findItem(ln.line);
         contents.push({
@@ -38,38 +40,33 @@ function tokenizeContent(
     return contents;
 }
 
-const a = ".classe1, classe2 #id1, id2 {style1: a, style2: b}"
+const WORDS_REGEX = '([\\w\\d ,-]+)';
+const CLASS_REGEX = new RegExp(`\.${WORDS_REGEX}`);
+const STYLE_REGEX = new RegExp(`{${WORDS_REGEX}}`);
+const ID_REGEX = new RegExp(`#${WORDS_REGEX}`);
 
-const b = a.replaceAll(' ', '');
-
-console.log(a, b);
-
-const CLASS_TAG = '.';
-const ID_TAG = '#';
-const STYLE_TAG = '{';
-const ALL_DATA_TAG = [CLASS_TAG, ID_TAG, STYLE_TAG, '$'];
-
-function otherDataTag(dataTag) {
-    return ALL_DATA_TAG.filter(tag => tag !== dataTag);
+function parseDataTagAsHtml(dataTags/*: IDataTag*/)/*: string*/ {
+    const classes = `class="${dataTags.classes}"`;
+    const styles = `style="${dataTags.styles}"`;
+    const id = `id="${dataTags.id}"`;
+    return [classes, styles, id].filter(v => !v.includes('undefined')).join(' ');
 }
 
-function otherDataTagForRegex(dataTag) {
-    const tags = otherDataTag(dataTag);
-    return `(${tags.join('|')})`;
-}
+function parseDataTagAsMd(type/*: string*/, dataTags/*: IDataTag*/)/*: string */ {
+    const htmlDataTag = parseDataTagAsHtml(dataTags);
 
-const CLASS_REGEX = new RegExp(`${CLASS_TAG}(.*?)${otherDataTagForRegex(CLASS_TAG)}`, 'm');
-
-const getClasses = (x) => x.match(CLASS_REGEX);
-
-console.log(getClasses(a));
-
-function parseDataTag(dataTags/*: IDataTag*/)/*: string*/ {
-
+    return htmlDataTag !== '' ? `\n<!-- .${type}: ${htmlDataTag} -->` : '';
 }
 
 function tokenizeDataTag(line/*: line*/)/*: IDataTag[]*/ {
-    const classes = 
+    const classesMatch = line.match(CLASS_REGEX);
+    const stylesMatch = line.match(STYLE_REGEX);
+    const idMatch = line.match(ID_REGEX);
+    return {
+        classes: classesMatch ? classesMatch[1] : undefined,
+        stylesMatch: stylesMatch ? stylesMatch[1] : undefined,
+        idMatch: idMatch ? idMatch[1] : undefined,
+    };
 }
 
 const items/*: IItem:[]*/ = getItems();

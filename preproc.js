@@ -5,10 +5,11 @@
 // interface IDiv {
 //     type: string;
 //     content: any[];
+//     dataTag: IDataTag;
 // }
 
-const DIV_REGEX = /\.\.(?!grid)(.*)/;
-const DIV_END = '..';
+const DIV_REGEX = /^==(.*)$/;
+const DIV_END = '==';
 
 function isDiv(line/*: string*/)/*: boolean*/ {
     return DIV_REGEX.test(line);
@@ -16,7 +17,7 @@ function isDiv(line/*: string*/)/*: boolean*/ {
 
 function divTokenizer(ln/*: LineReader*/)/*: IDiv*/ {
     const divType = ln.line.match(DIV_REGEX)[1];
-    const divContent = tokenizeContent(ln.nextLine(), DIV_END);
+    const divContent = tokenizeContent(ln.nextLine(), DIV_END, 'div');
     return { type: divType, content: divContent };
 }
 
@@ -82,13 +83,14 @@ function getItems()/*: IItem[]*/ {
 }
 
 // import { LineReader } from "../line-reader";
-// import { parseTokens, tokenizeContent } from "../utils";
+// import { parseStyle, tokenizeStyle, parseDataTagAsMd, tokenizeDataTag } from "../utils";
 // import { IItem } from "./item.interface";
 
 // interface ISection {
 //     type: string;
 //     sectionType: string;
 //     isFirst: boolean;
+//     dataTag: IDataTag;
 // }
 
 let isFirstSection = true;
@@ -100,13 +102,14 @@ function isSection(line/*: string*/)/*: boolean*/ {
 
 function sectionTokenizer(ln/*: LineReader*/)/*: ISection*/ {
     const sectionType = ln.line.match(SECTION_REGEX)[1];
+    const dataTag = ln.line.match(SECTION_REGEX)[2];
     const isFirst = isFirstSection;
     isFirstSection = false;
-    return { type: sectionType, isFirst };
+    return { type: sectionType, isFirst, dataTag: tokenizeDataTag(dataTag) };
 }
 
 function sectionParser(token/*: ISection*/)/*: string*/ {
-    return `${token.isFirst ? '' : token.type}`;
+    return `${token.isFirst ? '' : token.type} \n${parseDataTagAsMd('slide', token.dataTag)}`;
 }
 
 const section/*: IItem*/ = {
@@ -153,17 +156,19 @@ module.exports = (markdown/*: string*/) => {
 class LineReader {
     // lines: string[];
     // line!: string;
+    // lineNumber!: number;
 
     static EOF = '! End of File !';
 
     constructor(content/*: string*/) {
+        this.lineNumber = -1;
         this.lines = content.split('\n');
-        this.lines.push(LineReader.EOF);
         this.nextLine();
     }
 
     nextLine()/*: LineReader*/ {
         this.line = (this.lines.shift() ?? LineReader.EOF).trim();
+        this.lineNumber++;
         return this;
     }
 }
@@ -177,19 +182,26 @@ class LineReader {
 //     data: any;
 // }
 
+// export interface IDataTag {
+//     classes: string;
+//     styles: string;
+//     id: string;
+// }
+
 function parseTokens(tokens/*: IToken[]*/)/*: string*/ {
     return tokens.map((token) => token.parser(token.data)).join('\n');
 }
 
 function tokenizeContent(
     ln/*: LineReader*/,
-    stopToken/*: string*/ = LineReader.EOF
+    stopToken/*: string*/ = LineReader.EOF,
+    caller/*: string*/ = 'Markdown'
 ) {
     const contents/*: IToken[]*/ = [];
-    const caller = 'todo rename !';
+
     while (ln.line !== stopToken) {
         if (ln.line === LineReader.EOF && stopToken !== LineReader.EOF)
-            throw new Error(`Need to have ${stopToken} to close a ${caller}`);
+            throw new Error(`Need to have ${stopToken} to close a ${caller} on line : ${ln.lineNumber}`);
 
         const item/*: IItem*/ = findItem(ln.line);
         contents.push({
@@ -201,6 +213,35 @@ function tokenizeContent(
     }
 
     return contents;
+}
+
+const WORDS_REGEX = '([\\w\\d ,-]+)';
+const CLASS_REGEX = new RegExp(`\.${WORDS_REGEX}`);
+const STYLE_REGEX = new RegExp(`{${WORDS_REGEX}}`);
+const ID_REGEX = new RegExp(`#${WORDS_REGEX}`);
+
+function parseDataTagAsHtml(dataTags/*: IDataTag*/)/*: string*/ {
+    const classes = `class="${dataTags.classes}"`;
+    const styles = `style="${dataTags.styles}"`;
+    const id = `id="${dataTags.id}"`;
+    return [classes, styles, id].filter(v => !v.includes('undefined')).join(' ');
+}
+
+function parseDataTagAsMd(type/*: string*/, dataTags/*: IDataTag*/)/*: string */ {
+    const htmlDataTag = parseDataTagAsHtml(dataTags);
+
+    return htmlDataTag !== '' ? `\n<!-- .${type}: ${htmlDataTag} -->` : '';
+}
+
+function tokenizeDataTag(line/*: line*/)/*: IDataTag[]*/ {
+    const classesMatch = line.match(CLASS_REGEX);
+    const stylesMatch = line.match(STYLE_REGEX);
+    const idMatch = line.match(ID_REGEX);
+    return {
+        classes: classesMatch ? classesMatch[1] : undefined,
+        stylesMatch: stylesMatch ? stylesMatch[1] : undefined,
+        idMatch: idMatch ? idMatch[1] : undefined,
+    };
 }
 
 const items/*: IItem:[]*/ = getItems();

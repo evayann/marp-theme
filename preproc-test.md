@@ -2,23 +2,23 @@
 title: PreprocTest
 ---
 
----cover
+---.cover
 
-..titles
+==.titles
 
 # Comment rédiger une présentation stylé
 
 ## Du markdown au meilleur prez, il n'y a qu'un pas
 
-..
+==
 
 @img(./themes/assets/pastel/logo.svg)
 
-..credits
+==.credits
 By le Z
 
 Aka Yann Zavattero
-..
+==
 
 ---
 
@@ -30,14 +30,14 @@ Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit maiores labor
 
 ---
 
-..card
+==.card
 
 ### test
 
 @img(./themes/assets/pastel/logo.svg)
 
 lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla
-..
+==
 
 ----
 
@@ -45,45 +45,45 @@ lorem ipsum blablabla lorem ipsum blablabla lorem ipsum blablabla lorem ipsum bl
 
 Avec un contenu interessant
 
-..columns
+==.columns
 
-..card
+==.card
 Carte 1
-..
+==
 
-..card
+==.card
 Carte 2
-..
+==
 
-..card
+==.card
 Carte 3
-..
+==
 
-..
+==
 
----grid-3x2
+---.grid-3x2
 
-..card
+==.card
 @img(./themes/assets/pastel/pattern.svg)
 
 ## Card 1
 
-..
+==
 
 2
 
 ### 3
 
-..card
+==.card
 
 ### Card 4
 
 @img(./themes/assets/pastel/pattern.svg)
-..
+==
 
 5
 
-..card
+==.card
 
 ### Card 6
 
@@ -92,7 +92,7 @@ Carte 3
 lorem ipsum blablabla lorem
 lorem ipsum blablabla lorem
 lorem ipsum blablabla lorem
-..
+==
 
 ---
 
@@ -120,7 +120,7 @@ console.log(odds); // [2, 4]
 
 ## Encore plus !
 
-..columns
+==.columns
 
 ```js
 const numbers = [1, 2, 3, 4, 5];
@@ -146,4 +146,4 @@ const odds = number.filter(v => v % 2 === 0);
 console.log(odds); // [2, 4]
 ```
 
-..
+==

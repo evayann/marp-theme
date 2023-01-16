@@ -5,10 +5,11 @@
 // interface IDiv {
 //     type: string;
 //     content: any[];
+//     dataTag: IDataTag;
 // }
 
-const DIV_REGEX = /\.\.(?!grid)(.*)/;
-const DIV_END = '..';
+const DIV_REGEX = /^==(.*)$/;
+const DIV_END = '==';
 
 function isDiv(line/*: string*/)/*: boolean*/ {
     return DIV_REGEX.test(line);
@@ -16,7 +17,7 @@ function isDiv(line/*: string*/)/*: boolean*/ {
 
 function divTokenizer(ln/*: LineReader*/)/*: IDiv*/ {
     const divType = ln.line.match(DIV_REGEX)[1];
-    const divContent = tokenizeContent(ln.nextLine(), DIV_END, 'DIV');
+    const divContent = tokenizeContent(ln.nextLine(), DIV_END, 'div');
     return { type: divType, content: divContent };
 }
 
