@@ -11,6 +11,7 @@
 //     classes: string;
 //     styles: string;
 //     id: string;
+//     fragmentId?: number;
 // }
 
 function parseTokens(tokens/*: IToken[]*/)/*: string*/ {
@@ -44,12 +45,14 @@ const WORDS_REGEX = '([\\w\\d ,-]+)';
 const CLASS_REGEX = new RegExp(`\.${WORDS_REGEX}`);
 const STYLE_REGEX = new RegExp(`{${WORDS_REGEX}}`);
 const ID_REGEX = new RegExp(`#${WORDS_REGEX}`);
+const FRAGMENT_REGEX = /fragment-(\d+)/;
 
 function parseDataTagAsHtml(dataTags/*: IDataTag*/)/*: string*/ {
     const classes = `class="${dataTags.classes}"`;
+    const fragmentId = `data-fragment-index="${dataTags.fragmentId}"`;
     const styles = `style="${dataTags.styles}"`;
     const id = `id="${dataTags.id}"`;
-    return [classes, styles, id].filter(v => !v.includes('undefined')).join(' ');
+    return [classes, fragmentId, styles, id].filter(v => !v.includes('undefined')).join(' ');
 }
 
 function parseDataTagAsMd(type/*: string*/, dataTags/*: IDataTag*/)/*: string */ {
@@ -58,14 +61,32 @@ function parseDataTagAsMd(type/*: string*/, dataTags/*: IDataTag*/)/*: string */
     return htmlDataTag !== '' ? `\n<!-- .${type}: ${htmlDataTag} -->` : '';
 }
 
-function tokenizeDataTag(line/*: line*/)/*: IDataTag[]*/ {
+function getMatch(match/*: RegExpMatch*/)/*: string | undefined */ {
+    return match ? match[1].replaceAll(',', ' ') : undefined
+}
+
+function extractFragmentClass(classes/*: string*/)/*{classes: string[], fragmentId: number | undefined}*/ {
+    const classesList = classes.split(' ');
+    const fragmentClass = classesList.find(c => FRAGMENT_REGEX.test(c));
+    if (!fragmentClass) return { classes, fragmentId: undefined };
+
+    const classesWithoutFragmentId = classesList.filter(c => !c.match(FRAGMENT_REGEX));
+    classesWithoutFragmentId.push("fragment");
+    const newClasses = classesWithoutFragmentId.join(' ');
+    const fragmentId = +fragmentClass.match(FRAGMENT_REGEX)[1];
+    return { classes: newClasses, fragmentId };
+}
+
+function tokenizeDataTag(line/*: string*/)/*: IDataTag[]*/ {
     const classesMatch = line.match(CLASS_REGEX);
+    const { classes, fragmentId } = classesMatch ? extractFragmentClass(classesMatch[1].replaceAll(',', ' ')) : { classes: undefined, fragmentId: undefined };
     const stylesMatch = line.match(STYLE_REGEX);
     const idMatch = line.match(ID_REGEX);
     return {
-        classes: classesMatch ? classesMatch[1] : undefined,
-        stylesMatch: stylesMatch ? stylesMatch[1] : undefined,
-        idMatch: idMatch ? idMatch[1] : undefined,
+        classes,
+        fragmentId,
+        stylesMatch: getMatch(stylesMatch),
+        idMatch: getMatch(idMatch),
     };
 }
 

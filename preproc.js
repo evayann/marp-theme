@@ -1,29 +1,24 @@
-// import { LineReader } from "../line-reader";
-// import { parseTokens, tokenizeContent } from "../utils";
-// import { IItem } from "./item.interface";
-
 // interface IDiv {
-//     type: string;
 //     content: any[];
 //     dataTag: IDataTag;
 // }
 
-const DIV_REGEX = /^==(.*)$/;
-const DIV_END = '==';
+const DIV_REGEX = /^\/\/(.*)$/;
+const DIV_END = '//';
 
 function isDiv(line/*: string*/)/*: boolean*/ {
     return DIV_REGEX.test(line);
 }
 
 function divTokenizer(ln/*: LineReader*/)/*: IDiv*/ {
-    const divType = ln.line.match(DIV_REGEX)[1];
+    const dataTag = tokenizeDataTag(ln.line);
     const divContent = tokenizeContent(ln.nextLine(), DIV_END, 'div');
-    return { type: divType, content: divContent };
+    return { content: divContent, dataTag };
 }
 
 function divParser(token/*: IDiv*/)/*: string*/ {
     const parsedContent = parseTokens(token.content);
-    return `<div>\n\n${parsedContent}\n</div>`;
+    return `<div ${parseDataTagAsHtml(token.dataTag)}>\n\n${parsedContent}\n</div>`;
 }
 
 const div/*: IItem*/ = {
@@ -109,7 +104,7 @@ function sectionTokenizer(ln/*: LineReader*/)/*: ISection*/ {
 }
 
 function sectionParser(token/*: ISection*/)/*: string*/ {
-    return `${token.isFirst ? '' : token.type} \n${parseDataTagAsMd('slide', token.dataTag)}`;
+    return `${token.isFirst ? '' : token.type}${parseDataTagAsMd('slide', token.dataTag)}`;
 }
 
 const section/*: IItem*/ = {
@@ -120,18 +115,27 @@ const section/*: IItem*/ = {
 
 // interface IVanila {
 //     content: string;
+//     dataTag?: IDataTag;
 // }
+
+const LINE_COMMENT_REGEX = /\/\/(.*)/;
 
 function isVanila(line/*: string*/)/*: boolean*/ {
     return true;
 }
 
 function vanilaTokenizer(ln/*: LineReader*/)/*: IVanila*/ {
-    return { content: ln.line };
+    if (!LINE_COMMENT_REGEX.test(ln.line))
+        return { content: ln.line };
+
+    let comment = ln.line.match(LINE_COMMENT_REGEX)[1];
+    let dataTag = tokenizeDataTag(comment);
+    const lineWithoutComment = ln.line.replace(`//${comment}`, '');
+    return { content: lineWithoutComment, dataTag };
 }
 
 function vanilaParser(token/*: IVanila*/)/*: string*/ {
-    return token.content;
+    return `${token.content}${token.dataTag ? parseDataTagAsMd('element', token.dataTag) : ''}`;
 }
 
 const vanila/*: IItem*/ = {
@@ -143,7 +147,7 @@ const vanila/*: IItem*/ = {
 function improveMd(md/*: string*/)/*: string*/ {
     const ln = new LineReader(md);
     const tokens/*: any[]*/ = tokenizeContent(ln);
-    console.log(tokens, parseTokens(tokens));
+    // console.log(tokens, "===", parseTokens(tokens));
     return parseTokens(tokens);
 }
 
@@ -186,6 +190,7 @@ class LineReader {
 //     classes: string;
 //     styles: string;
 //     id: string;
+//     fragmentId?: number;
 // }
 
 function parseTokens(tokens/*: IToken[]*/)/*: string*/ {
@@ -219,12 +224,14 @@ const WORDS_REGEX = '([\\w\\d ,-]+)';
 const CLASS_REGEX = new RegExp(`\.${WORDS_REGEX}`);
 const STYLE_REGEX = new RegExp(`{${WORDS_REGEX}}`);
 const ID_REGEX = new RegExp(`#${WORDS_REGEX}`);
+const FRAGMENT_REGEX = /fragment-(\d+)/;
 
 function parseDataTagAsHtml(dataTags/*: IDataTag*/)/*: string*/ {
     const classes = `class="${dataTags.classes}"`;
+    const fragmentId = `data-fragment-index="${dataTags.fragmentId}"`;
     const styles = `style="${dataTags.styles}"`;
     const id = `id="${dataTags.id}"`;
-    return [classes, styles, id].filter(v => !v.includes('undefined')).join(' ');
+    return [classes, fragmentId, styles, id].filter(v => !v.includes('undefined')).join(' ');
 }
 
 function parseDataTagAsMd(type/*: string*/, dataTags/*: IDataTag*/)/*: string */ {
@@ -233,14 +240,32 @@ function parseDataTagAsMd(type/*: string*/, dataTags/*: IDataTag*/)/*: string */
     return htmlDataTag !== '' ? `\n<!-- .${type}: ${htmlDataTag} -->` : '';
 }
 
-function tokenizeDataTag(line/*: line*/)/*: IDataTag[]*/ {
+function getMatch(match/*: RegExpMatch*/)/*: string | undefined */ {
+    return match ? match[1].replaceAll(',', ' ') : undefined
+}
+
+function extractFragmentClass(classes/*: string*/)/*{classes: string[], fragmentId: number | undefined}*/ {
+    const classesList = classes.split(' ');
+    const fragmentClass = classesList.find(c => FRAGMENT_REGEX.test(c));
+    if (!fragmentClass) return { classes, fragmentId: undefined };
+
+    const classesWithoutFragmentId = classesList.filter(c => !c.match(FRAGMENT_REGEX));
+    classesWithoutFragmentId.push("fragment");
+    const newClasses = classesWithoutFragmentId.join(' ');
+    const fragmentId = +fragmentClass.match(FRAGMENT_REGEX)[1];
+    return { classes: newClasses, fragmentId };
+}
+
+function tokenizeDataTag(line/*: string*/)/*: IDataTag[]*/ {
     const classesMatch = line.match(CLASS_REGEX);
+    const { classes, fragmentId } = classesMatch ? extractFragmentClass(classesMatch[1].replaceAll(',', ' ')) : { classes: undefined, fragmentId: undefined };
     const stylesMatch = line.match(STYLE_REGEX);
     const idMatch = line.match(ID_REGEX);
     return {
-        classes: classesMatch ? classesMatch[1] : undefined,
-        stylesMatch: stylesMatch ? stylesMatch[1] : undefined,
-        idMatch: idMatch ? idMatch[1] : undefined,
+        classes,
+        fragmentId,
+        stylesMatch: getMatch(stylesMatch),
+        idMatch: getMatch(idMatch),
     };
 }
 

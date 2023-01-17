@@ -25,7 +25,7 @@ function sectionTokenizer(ln/*: LineReader*/)/*: ISection*/ {
 }
 
 function sectionParser(token/*: ISection*/)/*: string*/ {
-    return `${token.isFirst ? '' : token.type} \n${parseDataTagAsMd('slide', token.dataTag)}`;
+    return `${token.isFirst ? '' : token.type}${parseDataTagAsMd('slide', token.dataTag)}`;
 }
 
 const section/*: IItem*/ = {
