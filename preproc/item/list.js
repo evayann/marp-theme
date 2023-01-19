@@ -27,8 +27,9 @@ function listTokenizer(ln/*: LineReader*/)/*: IList*/ {
     const content = matches[2];
 
     const { lineWithoutComment, dataTag } = tokenizeDataTagInComment(ln.line);
+    const clearLine = lineWithoutComment.replace(/-[ ]*/, '');
 
-    const listItem = { content: lineWithoutComment, dataTag };
+    const listItem = { content: clearLine, dataTag };
 
     if (!currentList) {
         currentList = { parent: null, level: 0, childs: [listItem] };
@@ -59,7 +60,7 @@ function listParser(token/*: IList*/)/*: string*/ {
                 return listParser(child);
             }
             return `<li ${parseDataTagAsHtml(child.dataTag)}> ${child.content} </li>`;
-        });
+        }).join('\n');
     };
     return `<ul>\n ${parseChilds(token.childs)} \n</ul>`;
 }
