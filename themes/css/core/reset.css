@@ -37,9 +37,16 @@
   font-size: 2cqi;
 }
 
+.reveal .hljs {
+  min-height: auto;
+}
+.reveal :is(img, video, iframe) {
+  min-width: 100%;
+}
 .reveal .slides {
   width: 100vw !important;
   height: 100vh !important;
+  zoom: unset !important;
   inset: unset !important;
   transform: unset !important;
   display: flex !important;
@@ -47,7 +54,6 @@
   justify-content: center;
   align-items: center;
 }
-
 .reveal .slides section {
   margin: 0;
   top: 0 !important;
@@ -60,14 +66,4 @@
 }
 .reveal .slides section > * {
   margin: 0 5px;
-}
-
-.reveal .hljs {
-  min-height: auto;
-}
-
-.reveal img,
-.reveal video,
-.reveal iframe {
-  min-width: 100%;
 }

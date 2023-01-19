@@ -2,10 +2,15 @@
 // First match in list is take
 function getItems()/*: IItem[]*/ {
     return [
+        // Unit Item
         image,
-        section,
         list,
+
+        // Container
         div,
+        section,
+
+        // Default
         vanila
     ];
 }

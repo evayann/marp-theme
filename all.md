@@ -14,7 +14,7 @@ title: PreprocTest
 
 @img(./themes/assets/pastel/logo.svg)
 
-//.credits
+//.credits{background-color: blue;}
 By le Z
 
 Aka Yann Zavattero
