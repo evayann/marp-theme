@@ -12,7 +12,7 @@ class LineReader {
     }
 
     nextLine()/*: LineReader*/ {
-        this.line = (this.lines.shift() ?? LineReader.EOF).trim();
+        this.line = this.lines.shift() ?? LineReader.EOF;
         this.lineNumber++;
         return this;
     }

@@ -1,7 +1,3 @@
-// import { LineReader } from "../line-reader";
-// import { parseStyle, tokenizeStyle, parseDataTagAsMd, tokenizeDataTag } from "../utils";
-// import { IItem } from "./item.interface";
-
 // interface ISection {
 //     type: string;
 //     sectionType: string;
@@ -11,6 +7,10 @@
 
 let isFirstSection = true;
 const SECTION_REGEX = /(----?)(.*)/;
+
+function resetSection()/*: void*/ {
+    isFirstSection = true;
+}
 
 function isSection(line/*: string*/)/*: boolean*/ {
     return SECTION_REGEX.test(line);

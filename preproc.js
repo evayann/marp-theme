@@ -60,26 +60,93 @@ const image/*: IItem*/ = {
 //     check: (line: string) => boolean;
 //     tokenize: (ln: LineReader) => any;
 //     parse: (token: any) => string;
-// }// import { IItem } from "./item.interface";
-// import { section } from "./section";
-// import { div } from "./div";
-// import { image } from "./image";
-// import { vanila } from "./vanila";
-
-// Order sensitive
+// }// Order sensitive
 // First match in list is take
 function getItems()/*: IItem[]*/ {
     return [
         image,
         section,
+        list,
         div,
-        vanila,
+        vanila
     ];
 }
 
-// import { LineReader } from "../line-reader";
-// import { parseStyle, tokenizeStyle, parseDataTagAsMd, tokenizeDataTag } from "../utils";
-// import { IItem } from "./item.interface";
+function resetAll()/*: void*/ {
+    resetList();
+    resetSection();
+}
+// interface IList {
+//     childs: (IListItem | IList)[];
+//     level: number;
+//     parent?: IList;
+// }
+
+// interface IListItem {
+//     content: string;
+//     dataTag: IDataTag;
+// }
+
+let currentList = null;
+const LIST_REGEX = /^(\s*)[-+*]\s(.*)$/;
+
+function resetList()/*: void*/ {
+    currentList = null;
+}
+
+function isList(line/*: string*/)/*: boolean*/ {
+    return LIST_REGEX.test(line);
+}
+
+function listTokenizer(ln/*: LineReader*/)/*: IList*/ {
+    const matches = ln.line.match(LIST_REGEX);
+
+    const level = matches[1].length / 2;
+    const content = matches[2];
+
+    const { lineWithoutComment, dataTag } = tokenizeDataTagInComment(ln.line);
+
+    const listItem = { content: lineWithoutComment, dataTag };
+
+    if (!currentList) {
+        currentList = { parent: null, level: 0, childs: [listItem] };
+        return currentList;
+    }
+
+    if (currentList.level === level) {
+        currentList.childs.push(listItem);
+        return;
+    }
+
+    if (currentList.level < level) {
+        const subList = { parent: currentList, level, childs: [listItem] };
+        currentList.childs.push(subList);
+        currentList = subList;
+    }
+    else { // currentList.level > level
+        currentList = currentList.parent;
+        currentList.childs.push(listItem);
+    }
+
+}
+
+function listParser(token/*: IList*/)/*: string*/ {
+    function parseChilds(childs/*: (IListItem | IList)[]*/)/*: string*/ {
+        return childs.map(child => {
+            if (child.childs) { // Is IList
+                return listParser(child);
+            }
+            return `<li ${parseDataTagAsHtml(child.dataTag)}> ${child.content} </li>`;
+        });
+    };
+    return `<ul>\n ${parseChilds(token.childs)} \n</ul>`;
+}
+
+const list/*: IItem*/ = {
+    check: isList,
+    parse: listParser,
+    tokenize: listTokenizer
+};
 
 // interface ISection {
 //     type: string;
@@ -90,6 +157,10 @@ function getItems()/*: IItem[]*/ {
 
 let isFirstSection = true;
 const SECTION_REGEX = /(----?)(.*)/;
+
+function resetSection()/*: void*/ {
+    isFirstSection = true;
+}
 
 function isSection(line/*: string*/)/*: boolean*/ {
     return SECTION_REGEX.test(line);
@@ -118,19 +189,12 @@ const section/*: IItem*/ = {
 //     dataTag?: IDataTag;
 // }
 
-const LINE_COMMENT_REGEX = /\/\/(.*)/;
-
 function isVanila(line/*: string*/)/*: boolean*/ {
     return true;
 }
 
 function vanilaTokenizer(ln/*: LineReader*/)/*: IVanila*/ {
-    if (!LINE_COMMENT_REGEX.test(ln.line))
-        return { content: ln.line };
-
-    let comment = ln.line.match(LINE_COMMENT_REGEX)[1];
-    let dataTag = tokenizeDataTag(comment);
-    const lineWithoutComment = ln.line.replace(`//${comment}`, '');
+    const { lineWithoutComment, dataTag } = tokenizeDataTagInComment(ln.line);
     return { content: lineWithoutComment, dataTag };
 }
 
@@ -145,9 +209,9 @@ const vanila/*: IItem*/ = {
 };
 
 function improveMd(md/*: string*/)/*: string*/ {
+    resetAll();
     const ln = new LineReader(md);
     const tokens/*: any[]*/ = tokenizeContent(ln);
-    // console.log(tokens, "===", parseTokens(tokens));
     return parseTokens(tokens);
 }
 
@@ -171,7 +235,7 @@ class LineReader {
     }
 
     nextLine()/*: LineReader*/ {
-        this.line = (this.lines.shift() ?? LineReader.EOF).trim();
+        this.line = this.lines.shift() ?? LineReader.EOF;
         this.lineNumber++;
         return this;
     }
@@ -187,11 +251,19 @@ class LineReader {
 // }
 
 // export interface IDataTag {
-//     classes: string;
-//     styles: string;
-//     id: string;
+//     classes?: string;
+//     styles?: string;
+//     id?: string;
 //     fragmentId?: number;
 // }
+
+
+const EMPTY_DATA_TAG = {
+    classes: undefined,
+    styles: undefined,
+    id: undefined,
+    fragmentId: undefined
+}
 
 function parseTokens(tokens/*: IToken[]*/)/*: string*/ {
     return tokens.map((token) => token.parser(token.data)).join('\n');
@@ -209,10 +281,11 @@ function tokenizeContent(
             throw new Error(`Need to have ${stopToken} to close a ${caller} on line : ${ln.lineNumber}`);
 
         const item/*: IItem*/ = findItem(ln.line);
-        contents.push({
-            parser: item.parse,
-            data: item.tokenize(ln)
-        });
+        const data = item.tokenize(ln);
+
+        if (data) {
+            contents.push({ parser: item.parse, data });
+        }
 
         ln.nextLine();
     }
@@ -225,6 +298,7 @@ const CLASS_REGEX = new RegExp(`\.${WORDS_REGEX}`);
 const STYLE_REGEX = new RegExp(`{${WORDS_REGEX}}`);
 const ID_REGEX = new RegExp(`#${WORDS_REGEX}`);
 const FRAGMENT_REGEX = /fragment-(\d+)/;
+const LINE_COMMENT_REGEX = /\/\/(.*)/;
 
 function parseDataTagAsHtml(dataTags/*: IDataTag*/)/*: string*/ {
     const classes = `class="${dataTags.classes}"`;
@@ -256,7 +330,7 @@ function extractFragmentClass(classes/*: string*/)/*{classes: string[], fragment
     return { classes: newClasses, fragmentId };
 }
 
-function tokenizeDataTag(line/*: string*/)/*: IDataTag[]*/ {
+function tokenizeDataTag(line/*: string*/)/*: IDataTag*/ {
     const classesMatch = line.match(CLASS_REGEX);
     const { classes, fragmentId } = classesMatch ? extractFragmentClass(classesMatch[1].replaceAll(',', ' ')) : { classes: undefined, fragmentId: undefined };
     const stylesMatch = line.match(STYLE_REGEX);
@@ -267,6 +341,21 @@ function tokenizeDataTag(line/*: string*/)/*: IDataTag[]*/ {
         stylesMatch: getMatch(stylesMatch),
         idMatch: getMatch(idMatch),
     };
+}
+
+function tokenizeDataTagInComment(line/*: string*/)/*: { lineWithoutComment: string; dataTag: IDataTag; }*/ {
+    if (!LINE_COMMENT_REGEX.test(line))
+        return {
+            lineWithoutComment: line,
+            dataTag: { ...EMPTY_DATA_TAG }
+        };
+
+    const comment = line.match(LINE_COMMENT_REGEX)[1];
+    return {
+        lineWithoutComment: line.replace(`//${comment}`, ''),
+        dataTag: tokenizeDataTag(comment)
+    };
+
 }
 
 const items/*: IItem:[]*/ = getItems();

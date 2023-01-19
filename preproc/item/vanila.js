@@ -3,19 +3,12 @@
 //     dataTag?: IDataTag;
 // }
 
-const LINE_COMMENT_REGEX = /\/\/(.*)/;
-
 function isVanila(line/*: string*/)/*: boolean*/ {
     return true;
 }
 
 function vanilaTokenizer(ln/*: LineReader*/)/*: IVanila*/ {
-    if (!LINE_COMMENT_REGEX.test(ln.line))
-        return { content: ln.line };
-
-    let comment = ln.line.match(LINE_COMMENT_REGEX)[1];
-    let dataTag = tokenizeDataTag(comment);
-    const lineWithoutComment = ln.line.replace(`//${comment}`, '');
+    const { lineWithoutComment, dataTag } = tokenizeDataTagInComment(ln.line);
     return { content: lineWithoutComment, dataTag };
 }
 

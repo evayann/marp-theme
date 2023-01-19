@@ -1,7 +1,7 @@
 function improveMd(md/*: string*/)/*: string*/ {
+    resetAll();
     const ln = new LineReader(md);
     const tokens/*: any[]*/ = tokenizeContent(ln);
-    // console.log(tokens, "===", parseTokens(tokens));
     return parseTokens(tokens);
 }
 

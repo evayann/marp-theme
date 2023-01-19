@@ -1,28 +1,29 @@
 @use "./utilities/utilities" as utils;
 
-.reveal .slides {
-    width: 100vw !important;
-    height: 100vh !important;
-    inset: unset !important;
-    transform: unset !important;
-    @include utils.center;
-}
-
-.reveal .slides section {
-    @include utils.section;
-    @include utils.center;
-
-    &>* {
-        margin: 0 5px;
+.reveal {
+    & .hljs {
+        min-height: auto;
     }
-}
 
-.reveal .hljs {
-    min-height: auto;
-}
+    & :is(img, video, iframe) {
+        min-width: 100%;
+    }
 
-.reveal img,
-.reveal video,
-.reveal iframe {
-    min-width: 100%;
+    & .slides {
+        width: 100vw !important;
+        height: 100vh !important;
+        zoom: unset !important;
+        inset: unset !important;
+        transform: unset !important;
+        @include utils.center;
+
+        & section {
+            @include utils.section;
+            @include utils.center;
+
+            &>* {
+                margin: 0 5px;
+            }
+        }
+    }
 }
