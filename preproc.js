@@ -107,7 +107,6 @@ function listTokenizer(ln/*: LineReader*/)/*: IList*/ {
     const matches = ln.line.match(LIST_REGEX);
 
     const level = matches[1].length / 2;
-    const content = matches[2];
 
     const { lineWithoutComment, dataTag } = tokenizeDataTagInComment(ln.line);
     const clearLine = lineWithoutComment.replace(/-[ ]*/, '');
@@ -236,13 +235,13 @@ const EMPTY_DATA_TAG = {
 
 const EMPTY_CLASSES = {
     classes: undefined,
-    styles: undefined,
+    styles: {},
     fragmentId: undefined,
 };
 
 const WORDS_REGEX = '([\\w\\d ,-]+)';
+const STYLE_REGEX = /\{(.*)\}/;
 const CLASS_REGEX = new RegExp(`\\.${WORDS_REGEX}`);
-const STYLE_REGEX = new RegExp(`{([\\w\\d ,-]+:)}`);
 const ID_REGEX = new RegExp(`#${WORDS_REGEX}`);
 const FRAGMENT_REGEX = /fragment-(\d+)/;
 const GRID_REGEX = /grid-(\d+)x(\d+)/;
@@ -253,7 +252,8 @@ function parseDataTagAsHtml(dataTags/*: IDataTag*/)/*: string*/ {
     const fragmentId = `data-fragment-index="${dataTags.fragmentId}"`;
     const styles = `style="${dataTags.styles}"`;
     const id = `id="${dataTags.id}"`;
-    return [classes, fragmentId, styles, id].filter(v => !v.includes('undefined')).join(' ');
+    const tagsToDisplay = [classes, fragmentId, styles, id].filter(v => !v.includes('undefined') && v !== 'style="; "');
+    return tagsToDisplay.join(' ');
 }
 
 function parseDataTagAsMd(type/*: string*/, dataTags/*: IDataTag*/)/*: string */ {
@@ -284,12 +284,12 @@ function tokenizeDataTag(line/*: string*/)/*: IDataTag*/ {
     const classesMatch = line.match(CLASS_REGEX);
     const { classes, styles, fragmentId } = classesMatch ? extractSpecialClasses(classesMatch[1].replaceAll(',', ' ')) : { ...EMPTY_CLASSES };
     const stylesMatch = line.match(STYLE_REGEX);
-    const inlineStyles = stylesMatch ? stylesMatch[1] : {}
+    const inlineStyles = stylesMatch ? stylesMatch[1] : '';
     const idMatch = line.match(ID_REGEX);
     return {
         classes,
         fragmentId,
-        styles: stylesToString({ ...inlineStyles, ...styles }),
+        styles: `${inlineStyles}; ${stylesToString(styles)}`,
         id: getMatch(idMatch),
     };
 }
@@ -302,7 +302,7 @@ function extractSpecialClasses(classesString/*: string*/)/*: IClassesComputed*/ 
     const classesList = classesString.split(' ');
     let fragment = extractFragment(classesList);
     let grid = extractGrid(fragment.classes);
-    const classes = grid.classes;
+    const classes = grid.classes.filter(classe => classe !== '').join(' ');
     const styles = grid.styles;
     return {
         classes,
@@ -323,14 +323,13 @@ function extractFragment(classes/*: string[]*/)/*: { classes: string[], id: numb
 
 function extractGrid(classes/*: string[]*/)/*: { classes: string[], styles: any } */ {
     const gridClass = classes.find(c => GRID_REGEX.test(c));
-    if (!gridClass) return { classes, styles: undefined };
+    if (!gridClass) return { classes, styles: {} };
 
     const classesWithoutGrid = classes.filter(c => !c.match(GRID_REGEX));
-    // classesWithoutGrid.push('grid')
+    classesWithoutGrid.push('grid');
     const row = +gridClass.match(GRID_REGEX)[1];
     const column = +gridClass.match(GRID_REGEX)[2];
     const styles = {
-        display: 'grid',
         'grid-template-rows': `repeat(${row}, 1fr)`,
         'grid-template-columns': `repeat(${column}, 1fr)`,
     };

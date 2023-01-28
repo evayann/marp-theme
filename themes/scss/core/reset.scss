@@ -1,29 +1,28 @@
 @use "./utilities/utilities" as utils;
 
 .reveal {
-    & .hljs {
+    .hljs {
         min-height: auto;
     }
 
-    & :is(img, video, iframe) {
+    :is(img, video, iframe) {
         min-width: 100%;
     }
 
-    & .slides {
+    .slides {
         width: 100vw !important;
         height: 100vh !important;
         zoom: unset !important;
         inset: unset !important;
         transform: unset !important;
         @include utils.center;
+    }
+}
 
-        & section {
-            @include utils.section;
-            @include utils.center;
-
-            &>* {
-                margin: 0 5px;
-            }
-        }
+section {
+    @include utils.section;
+    @include utils.center;
+    & * {
+        margin: 0;
     }
 }

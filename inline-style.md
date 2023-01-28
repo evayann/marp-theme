@@ -2,10 +2,14 @@
 title: Inline Style
 ---
 
-//{background-color: red}.test, de-classe#et-d-id
+---{background-color: red; border-radius: 50px}.test#bizarre
 
-Some random text
+Test de contenu
 
-Just to test
+Avec du style 
 
-//
+Inline
+
+---
+
+Et sur un élément //#id.c1, c2 c3{background-color: blue; padding: 10rem; }

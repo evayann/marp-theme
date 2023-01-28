@@ -1,5 +1,7 @@
 ---
 title: PreprocTest
+revealOptions: 
+  display: ll
 ---
 
 ---.cover
@@ -104,7 +106,7 @@ lorem ipsum blablabla lorem
 lorem ipsum blablabla lorem
 //
 
----
+----
 
 ## Et une liste md
 
@@ -126,7 +128,7 @@ const odds = number.filter(v => v % 2 === 0);
 console.log(odds); // [2, 4]
 ```
 
-----
+---
 
 ## Encore plus !
 

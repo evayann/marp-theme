@@ -24,7 +24,6 @@ function listTokenizer(ln/*: LineReader*/)/*: IList*/ {
     const matches = ln.line.match(LIST_REGEX);
 
     const level = matches[1].length / 2;
-    const content = matches[2];
 
     const { lineWithoutComment, dataTag } = tokenizeDataTagInComment(ln.line);
     const clearLine = lineWithoutComment.replace(/-[ ]*/, '');
